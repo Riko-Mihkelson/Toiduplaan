@@ -29,5 +29,8 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 ## Reeglid
 - Kõik kasutajale nähtav tekst on eesti keeles; kontrolli käänded (nt „kahele inimesele”).
 - Ostunimekirja kogused ümardatakse poe pakendite järgi.
-- Avaldatud versioon: https://claude.ai/artifact/KxzFdSBLNMh2dNABBt8Ra5
+- Avalik äpp (GitHub Pages, iPhone'i avakuvale lisatav): https://riko-mihkelson.github.io/Toiduplaan/
+  Uuendamiseks: suurenda `sw.js` failis `VERSION`, tee commit ja `git push` (hoidla github.com/Riko-Mihkelson/Toiduplaan,
+  haru `main`). Giti autor on GitHubi noreply-aadress – ära kasuta isiklikku e-posti.
+- Claude'i artefakt: https://claude.ai/artifact/KxzFdSBLNMh2dNABBt8Ra5
   (uuendamiseks avalda `toiduplaan.html` koos `img/` failidega sama URL-i peale).
