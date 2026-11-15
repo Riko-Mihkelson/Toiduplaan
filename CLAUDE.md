@@ -18,7 +18,18 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 - `ING` – koostisosad: ühik, toiteväärtus (100 g/ml või 1 tk kohta: kcal, valk, süsivesikud, rasv, kiudained),
   kategooria, müügiviis (`p` pakend, `pc` tükk, `kg` kaalukaup), pakendi suurus, hinnad `[soodne, keskmine, premium]`,
   nimi ja hinnangulise hinna lipp.
-- Hinnad on Rimi e-poest (`PRICE_DATE`). Teiste poodide hinnad = Rimi hind × `STORES[].idx` (hinnang).
+- Hinnad: plokk `PRICES` (failis `/*HINNAD*/ … /*HINNAD-LÕPP*/`) = iga poe pakendihinnad `[soodne, keskmine, premium]`.
+  Päris hinnad on Rimist, Selverist ja Maximast (Barbora). Lidl ja Coop = Rimi hind × `STORES[].idx` (e-poodi pole).
+  Prismat Eestis enam pole. Kui poel tootest hind puudub, kasutatakse Rimi hinda × poe hinnatase ja märgitakse `*`.
+  `ING` hinnad on vaid viimane tagavara.
+
+## Hindade uuendamine
+1. `tools/price-specs.js` – iga koostisosa otsingusõna ja reeglid (peab sisaldama / ei tohi sisaldada).
+2. `tools/collect-prices.js` – käivita brauseris poe lehel (rimi.ee, selver.ee, barbora.ee); poe lehed ei luba
+   välist skripti laadida, seega kleebi kood otse. Rimi: lehe HTML-i lugemine; Selver: Vue ruuteriga otsing
+   (`#app.__vue__.$router.push`); Barbora: otsingulahtrisse kirjutamine. Kontrolli tulemuste nimed üle – vale
+   vaste (nt koeratoit) paranda reeglites.
+3. Salvesta tulemus `tools/prices/<pood>.json` ja käivita `node tools/apply-prices.js`.
 - `R` – retseptid: nimi, söögikord (`hommik`/`pea`), maitsesildid, aeg, koostisosad portsjoni kohta, valmistamise sammud.
   Retsepti nimi ja koostisosad peavad vastama täpselt fotole.
 - Makrod ja maitsesildid (kana, kala jne) arvutatakse koostisosadest automaatselt.

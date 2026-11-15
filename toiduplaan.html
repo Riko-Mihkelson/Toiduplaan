@@ -222,11 +222,12 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 
 <script>
 // ---------- Poed ja hinnaklassid ----------
-// Hinnad on kogutud Rimi e-poest 9.11.2026. Teiste poodide hinnad = Rimi hind × poe hinnaindeks (hinnang).
-const PRICE_DATE="9.11.2026";
+// Päris hinnad: Rimi, Selveri ja Barbora (Maxima) e-poest, kogutud tools/collect-prices.js ja
+// kirjutatud siia tools/apply-prices.js abil (plokk PRICES). Lidlil ja Coopil e-poodi pole:
+// nende hinnad = Rimi hind × hinnanguline hinnatase.
 const STORES=[
-  {id:"lidl",name:"Lidl",idx:.88},{id:"maxima",name:"Maxima",idx:.95},{id:"prisma",name:"Prisma",idx:.99},
-  {id:"rimi",name:"Rimi",idx:1.00},{id:"selver",name:"Selver",idx:1.01},{id:"coop",name:"Coop",idx:1.03}];
+  {id:"rimi",name:"Rimi",idx:1.00,src:"Rimi e-pood"},{id:"selver",name:"Selver",idx:1.01,src:"Selveri e-pood"},
+  {id:"maxima",name:"Maxima",idx:.95,src:"Barbora e-pood"},{id:"lidl",name:"Lidl",idx:.88},{id:"coop",name:"Coop",idx:1.03}];
 const TIERS=[
   {id:"soodne",ti:0,name:"Soodne",desc:"Poe oma brändi ja odavaimad tooted. Rohkem kaunvilju, mune ja kana.",max:2.6},
   {id:"keskmine",ti:1,name:"Keskmine",desc:"Tavalised kaubamärgid. Kala paar korda nädalas.",max:4.2},
@@ -234,6 +235,7 @@ const TIERS=[
 const NUM=["","ühele","kahele","kolmele","neljale","viiele","kuuele","seitsmele","kaheksale","üheksale","kümnele"];
 const forN=n=>`${NUM[n]||n} inimesele`;
 
+/*HINNAD*/const PRICES={"date":"2026-11-15","idx":{"maxima":1,"rimi":1,"selver":1.05},"stores":{"maxima":{"kreeka jogurt":[1.05,1.89,2.42],"piim":[0.59,1.05,1.29],"granola":[2.59,3.9,4.49],"kiivi":[0.37,0.64,0.64],"mandlid":[3.58,5.57,6.44],"täisteraleib":[0.81,1.15,1.29],"avokaado":[0.97,0.97,0.97],"munad":[2.7,2.8,3],"spinat":[1.2,1.49,1.49],"oliiviõli":[4.59,8.35,10.49],"chia seemned":[1.42,2.89,2.89],"kaerajook":[1.59,3.25,3.65],"mango":[2.19,3.79,3.79],"maasikad":[3.12,4.99,4.99],"mustikad":[3.09,3.99,3.99],"banaan":[0.15,0.15,0.15],"mesi":[4.81,5.62,6.74],"nisujahu":[0.75,1.15,1.25],"kanafilee":[2.39,3.74,3.99],"punased oad":[0.96,1.28,2.06],"mais":[1.48,1.75,2.42],"kirsstomatid":[2.59,2.59,2.59],"punane kapsas":[1.15,2.19,2.19],"salatisegu":[1.99,1.99,1.99],"porgand":[0.04,0.11,0.11],"brokoli":[1.48,1.48,1.96],"riis":[1.59,2.68,3.34],"roheline sibul":[0.73,0.73,0.73],"sojakaste":[0.87,2.59,2.59],"purustatud tomatid":[1.42,1.59,1.95],"koriander":[0.99,0.99,0.99],"garam masala":[1.59,1.94,1.94],"täisteraspagetid":[0.99,1.39,2.25],"basiilik":[2.19,2.19,2.19],"mustad oad":[1.39,1.71,2.66],"laim":[0.39,0.39,0.39],"kikerherned":[0.82,1.41,2.06],"parmesan":[2.18,2.41,2.41],"veiseliha ribad":[6,6,14.53],"jasmiiniriis":[1.39,1.83,1.83],"veisehakkliha":[4.99,5.2,5.2],"kinoa":[3.99,4.83,4.83],"riivjuust":[1.25,1.84,1.97],"sushiriis":[1.99,2.31,2.79],"kurk":[0.99,1.41,1.41],"edamame":[2.55,2.59,2.59],"seesamiseemned":[0.8,1.33,1.59],"tursafilee":[4.99,4.99,4.99],"sidrun":[0.24,0.24,0.24],"petersell":[0.89,0.89,0.89],"krevetid":[4.84,11.18,12.11],"fettuccine":[1,2.06,2.19],"küüslauk":[0.5,1.5,1.5],"punane sibul":[0.19,0.19,0.19],"fetajuust":[1.69,2.52,2.52],"kookospiim":[2.86,3.15,4.46],"karripulber":[0.56,0.56,1.17],"bataat":[2.79,2.79,2.79],"pruun riis":[1.39,2.25,3.48],"idud":[1.76,4.73,4.73],"tofu":[2.01,2.11,2.11],"šampinjonid":[3.18,3.19,4],"valged oad":[0.69,1.39,1.39],"kartul":[0.43,1.29,1.29],"falafel":[3.78,3.78,3.78],"hummus":[1.39,2.39,2.62],"tomat":[0.56,0.59,1.41],"kodujuust":[2.44,3.39,4.22],"murulauk":[1.19,3.57,3.57],"toorjuust":[1.12,1.54,1.99],"suitsulõhe":[2.41,2.89,2.89],"teriyaki kaste":[3.5,6.64,6.92],"rohelised oad":[1.39,1.39,1.39],"punased läätsed":[2.84,2.84,2.84],"kõrvits":[1.19,1.19,1.19],"kõrvitsaseemned":[1.5,1.74,1.74],"pesto":[1.74,3.46,3.55],"munanuudlid":[1.95,2.15,2.56],"lavašš":[1.12,1.19,1.19],"kanakoivad":[2.69,2.99,2.99],"burgerikukkel":[2.45,2.45,2.45],"penne":[0.99,1.99,2.25],"kaerahelbed":[0.79,1,1.29]},"rimi":{"kaerahelbed":[0.34,1.01,1.01],"kreeka jogurt":[0.89,1.83,2.04],"vaarikad":[4.99,4.99,4.99],"piim":[0.75,1.25,1.64],"granola":[2.65,2.92,4.3],"kiivi":[0.37,0.39,0.67],"mandlid":[3.99,4.11,8.09],"täisteraleib":[0.53,1.09,1.34],"avokaado":[0.85,0.91,2.12],"munad":[1.6,3.6,3.6],"spinat":[1.59,1.59,1.59],"oliiviõli":[4.99,9.79,10.49],"chia seemned":[1.79,3.42,3.55],"kaerajook":[1.69,2.75,2.75],"maasikad":[3.49,3.49,3.49],"mustikad":[3.59,7.99,7.99],"banaan":[0.15,0.36,0.36],"mesi":[4.9,5.69,6.74],"nisujahu":[0.32,0.96,0.96],"kanafilee":[2.55,5.15,5.19],"punased oad":[0.95,1.49,1.55],"mais":[1.28,2.15,2.89],"kirsstomatid":[3.24,3.24,3.24],"punane kapsas":[1.19,2.69,2.69],"salatisegu":[1.89,2.36,2.36],"suvikõrvits":[0.65,0.67,0.67],"paprika":[0.48,1.45,1.45],"porgand":[0.03,0.1,0.1],"brokoli":[1.53,1.79,1.79],"riis":[0.79,2.38,2.38],"roheline sibul":[0.5,0.5,0.5],"sojakaste":[0.77,2.31,2.31],"purustatud tomatid":[0.94,1.69,2.36],"koriander":[2.39,2.39,2.39],"garam masala":[1.79,1.79,1.79],"kalkunihakkliha":[5.89,5.89,5.89],"täisteraspagetid":[0.99,0.99,0.99],"basiilik":[2.19,2.49,2.49],"mustad oad":[1.55,1.8,1.8],"laim":[0.34,0.34,0.34],"kikerherned":[0.99,1.29,1.74],"parmesan":[3,4.29,4.29],"jasmiiniriis":[1.39,1.83,1.83],"veisehakkliha":[3.75,4.99,4.99],"kinoa":[2.99,2.99,2.99],"riivjuust":[1.38,1.64,1.99],"lõhefilee":[11.18,13.03,13.03],"sushiriis":[1.59,2.87,2.87],"kurk":[0.9,2.69,2.69],"edamame":[2.55,3.64,3.64],"seesamiseemned":[1.19,1.53,1.53],"sidrun":[0.2,0.43,0.51],"petersell":[0.73,1.23,1.23],"krevetid":[3.99,11.09,11.09],"fettuccine":[2.29,2.35,2.35],"küüslauk":[0.5,0.99,0.99],"punane sibul":[0.21,0.24,0.24],"tortillad":[2.46,2.5,3.19],"fetajuust":[1.31,2.45,2.99],"kookospiim":[2.15,2.55,4.3],"bataat":[1.99,1.99,1.99],"pruun riis":[1.44,1.99,1.99],"lehtkapsas":[1.91,1.91,1.91],"idud":[1.86,2.65,4.64],"tofu":[1.49,2.6,2.6],"šampinjonid":[1.6,2.29,3.99],"valged oad":[0.65,0.95,0.99],"kartul":[0.41,1.23,1.23],"seller":[1.99,1.99,1.99],"falafel":[3.59,3.59,3.59],"hummus":[1.46,2.61,2.62],"tomat":[0.24,0.53,0.6],"kodujuust":[1.79,3.13,3.32],"murulauk":[2.39,2.39,2.39],"toorjuust":[1.29,2.17,2.29],"suitsulõhe":[4.69,4.69,4.69],"teriyaki kaste":[6.26,6.92,6.92],"punased läätsed":[1.35,1.59,2.29],"kõrvits":[1.19,3.57,3.57],"kõrvitsaseemned":[2.39,2.45,4.04],"pesto":[1.69,3.2,3.77],"munanuudlid":[1.48,1.49,1.7],"õun":[0.11,0.32,0.32],"lavašš":[1.19,1.19,1.19],"kalkunifilee":[5.76,5.99,5.99],"kanakoivad":[2.19,3.75,3.75],"burgerikukkel":[2.49,3.58,3.58],"rooma salat":[1.99,4.35,4.35],"penne":[1.25,1.39,1.59]},"selver":{"kaerahelbed":[1,1.2,1.29],"kreeka jogurt":[1.57,2.09,3.92],"vaarikad":[5.96,7.19,7.85],"piim":[0.62,1.25,1.55],"granola":[1.99,3.93,4.89],"kiivi":[0.2,0.61,0.61],"täisteraleib":[0.82,1.14,1.37],"avokaado":[1.21,1.36,3.03],"munad":[1.9,3.3,3.9],"tšillihelbed":[0.53,0.53,0.53],"spinat":[1.99,1.99,1.99],"oliiviõli":[7.49,9.79,10.49],"chia seemned":[1.75,1.75,1.75],"kaerajook":[1.59,2.79,3.69],"mango":[2.5,2.5,2.5],"münt":[2.39,2.39,2.39],"maasikad":[4.87,12.37,12.37],"mustikad":[3.98,4.53,7.85],"banaan":[0.15,0.15,0.15],"mesi":[4.27,6.29,6.44],"nisujahu":[0.32,0.96,0.96],"punased oad":[1.29,1.55,2.28],"punane kapsas":[0.99,0.99,0.99],"salatisegu":[2.98,2.98,2.98],"suvikõrvits":[0.62,0.62,0.62],"paprika":[0.48,0.9,1.21],"porgand":[0.04,0.12,0.12],"brokoli":[1.47,2.09,3.67],"riis":[0.39,1.18,1.18],"roheline sibul":[1.15,3.13,3.13],"sojakaste":[0.88,2.21,2.21],"purustatud tomatid":[1.49,1.89,1.89],"koriander":[1,1,1],"garam masala":[1.55,1.55,1.55],"täisteraspagetid":[1.47,1.47,1.47],"mustad oad":[1.39,1.85,1.85],"laim":[0.39,0.39,0.39],"kikerherned":[1.03,1.78,1.87],"veiseliha ribad":[8.94,8.94,8.94],"jasmiiniriis":[1.2,2.15,2.99],"veisehakkliha":[7.72,10.65,10.65],"kinoa":[2.42,3.08,4.68],"riivjuust":[1.26,2.01,3.14],"lõhefilee":[9.96,11.96,11.96],"sushiriis":[1.99,1.99,1.99],"kurk":[1.2,1.2,1.2],"edamame":[2.39,2.39,2.39],"seesamiseemned":[0.8,1.17,1.99],"sidrun":[0.23,0.23,0.23],"krevetid":[9.96,12.98,14.9],"küüslauk":[0.54,1.62,1.62],"punane sibul":[0.21,0.21,0.21],"tortillad":[2.36,3.39,4.37],"fetajuust":[3.34,3.34,3.34],"kookospiim":[2.96,3.79,3.79],"bataat":[1.99,1.99,1.99],"pruun riis":[1.69,3.13,3.13],"lehtkapsas":[3.19,3.19,3.19],"idud":[1.79,1.79,1.79],"tofu":[2.08,2.15,2.69],"šampinjonid":[1.88,3.59,3.59],"valged oad":[0.61,1.82,1.82],"kartul":[0.37,1.11,1.11],"seller":[2.47,2.47,2.47],"hummus":[1.75,2.43,3.07],"tomat":[0.3,0.48,0.48],"kodujuust":[2.85,3.35,4.3],"murulauk":[2.49,2.49,2.49],"toorjuust":[1.05,2.24,2.3],"suitsulõhe":[3.68,4.39,4.69],"teriyaki kaste":[4.46,7.24,7.24],"punased läätsed":[3.55,5.35,5.35],"kõrvits":[1.59,1.59,1.59],"kõrvitsaseemned":[1.73,1.88,3.32],"pesto":[2.21,3.2,3.46],"munanuudlid":[1.45,1.68,1.68],"õun":[0.14,0.43,0.43],"kalkunifilee":[6.84,6.84,6.84],"burgerikukkel":[2.45,3.94,3.94],"rooma salat":[1.99,1.99,1.99],"penne":[1.47,1.47,1.47]}}};/*HINNAD-LÕPP*/
 // ---------- Koostisosad ----------
 // [ühik, toiteväärtus 100 g/ml kohta (tk puhul 1 tk kohta): kcal, valk, süsivesikud, rasv, kiudained, kategooria,
 //   müügiviis: "p" pakend | "pc" tükk | "kg" kaalukaup, pakendi suurus, hinnad [soodne, keskmine, premium], pakendi nimi, hinnanguline?]
@@ -500,7 +502,18 @@ function restorePlan(){
 function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v)return Object.assign(JSON.parse(JSON.stringify(def)),v)}catch(e){}return JSON.parse(JSON.stringify(def))}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
-const store=()=>STORES.find(s=>s.id===S.store)||STORES[3];
+const store=()=>STORES.find(s=>s.id===S.store)||STORES[0];
+const PRICE_DATE=PRICES.date.split("-").reverse().map(Number).join(".");
+const realPrices=s=>!!PRICES.stores[s.id];
+const storeIdx=s=>PRICES.idx[s.id]??s.idx;
+// pakendi hind valitud poes ja hinnaklassis; est = hind on hinnanguline
+function packPrice(name,t=tier()){
+  const s=store(), own=PRICES.stores[s.id]?.[name];
+  if(own) return {p:own[t.ti],est:false};
+  const rimi=PRICES.stores.rimi?.[name], f=storeIdx(s);
+  if(rimi) return {p:rimi[t.ti]*f,est:realPrices(s)};
+  return {p:ING[name][5][t.ti]*f,est:true};
+}
 const tierOf=id=>TIERS.find(t=>t.id===id)||TIERS[1];
 const tier=()=>tierOf(S.tier);
 const eur=v=>v.toFixed(2).replace(".",",")+" €";
@@ -523,7 +536,7 @@ const ready=i=>i===0||(i===1&&!!S.store)||(i===2&&!!S.store&&anySlot())||(i>=3&&
 
 // ---------- Hinnad ----------
 // ühe ühiku hind (g, ml või tk) valitud poes ja hinnaklassis
-function unitPrice(name,t=tier()){const g=ING[name];return g[5][t.ti]*store().idx/g[4]}
+function unitPrice(name,t=tier()){return packPrice(name,t).p/ING[name][4]}
 function costOf(r,t=tier()){return r.i.reduce((a,[n,q])=>a+q*unitPrice(n,t),0)}
 const price=r=>costOf(r);
 
@@ -586,9 +599,9 @@ const packSize=g=>g[0]==="tk"?g[4]+" tk":amt(g[4],g[0]);
 function shopping(){
   const need=new Map();
   meals().forEach(([k,r])=>{const m=pm(r,k);r.i.forEach(([n,q])=>need.set(n,(need.get(n)||0)+q*m))});
-  const t=tier(), idx=store().idx;
+  const t=tier();
   return [...need].map(([n,q])=>{
-    const g=ING[n], [u,,cat,kind,size,ps,label,est]=g, p=ps[t.ti]*idx;
+    const g=ING[n], [u,,cat,kind,size,,label,est0]=g, pp=packPrice(n,t), p=pp.p, est=est0&&pp.est||pp.est;
     let buy,cost,count;
     if(kind==="p"){count=Math.max(1,Math.ceil(q/size-0.03));buy=`${count} × ${packSize(g)}`;cost=count*p}
     else if(kind==="pc"){count=Math.max(1,Math.ceil(q-0.05));buy=`${count} tk`;cost=count*p}
@@ -612,10 +625,10 @@ const PAGES=[
       <div class="collage" aria-hidden="true">${HERO_IMGS.map(i=>`<img src="${R[i].img}" alt="">`).join("")}</div>
     </div>
     <div class="q"><p class="eyebrow">Samm 1 / ${STEPS.length}</p><h2 class="qh">Kust sa poodled?</h2>
-      <p class="lead">Hinnad põhinevad Rimi e-poe hindadel (${PRICE_DATE}). Teiste poodide hinnad on arvutatud poe hinnataseme järgi.</p></div>
-    <div class="cards">${STORES.map(s=>`<button class="card store" aria-pressed="${s.id===S.store}" data-store="${s.id}"><b>${s.name}</b>
-      <span class="lvl"><i style="width:${Math.round((s.idx-.8)/.25*100)}%"></i></span>
-      <small>${s.id==="rimi"?"päris e-poe hinnad":"hinnatase "+Math.round(s.idx*100)+" (Rimi = 100)"}</small></button>`).join("")}</div>
+      <p class="lead">Rimi, Selveri ja Maxima hinnad on võetud nende e-poodidest (${PRICE_DATE}). Lidlil ja Coopil e-poodi ei ole, nende hinnad on hinnangulised.</p></div>
+    <div class="cards">${STORES.map(s=>{const i=storeIdx(s);return `<button class="card store" aria-pressed="${s.id===S.store}" data-store="${s.id}"><b>${s.name}</b>
+      <span class="lvl"><i style="width:${Math.max(8,Math.min(100,Math.round((i-.8)/.35*100)))}%"></i></span>
+      <small>${realPrices(s)?`päris hinnad · ${s.src}`:"hinnanguline"} · hinnatase ${Math.round(i*100)}</small></button>`}).join("")}</div>
     ${nav("Edasi →",!!S.store)}`,
   ()=>`${head(1,"Kellele ja millal?","Selle järgi arvutan portsjonid, hinnad ja ostunimekirja kogused.")}
     <div class="box"><p class="label">Mitu inimest sööb?</p>
@@ -685,7 +698,7 @@ const PAGES=[
     <div class="receipt"><div class="rh"><b>${store().name.toUpperCase()}</b><br>${S.people} in · 7 päeva · ${tier().name.toLowerCase()}</div>
       ${groups.map(([c,l])=>`<div class="cat">${CAT[c]}</div>${l.map(x=>`<label class="ln ${got.has(x.n)?"got":""}"><input type="checkbox" data-key="${x.n}" ${got.has(x.n)?"checked":""}><span>${x.label}${x.est?"*":""}</span><span class="qty">${x.buy}</span><small>vaja ${x.need} · ${eur(x.cost)}</small></label>`).join("")}`).join("")}
       <div class="tot"><span>POES MAKSAD ~</span><span>${eur(pay)}</span></div>
-      <div class="note">Hinnad: Rimi e-pood ${PRICE_DATE}${store().id!=="rimi"?`, ${store().name} hinnatase on hinnanguline`:""}.${anyEst?"<br>* toodet polnud e-poes, hind on hinnanguline.":""}</div></div>
+      <div class="note">${realPrices(store())?`Hinnad: ${store().src}, ${PRICE_DATE}.${anyEst?"<br>* toodet ei leitud e-poest, hind on hinnanguline.":""}`:`${store().name} hinnad on hinnangulised (Rimi hinnad × hinnatase ${Math.round(storeIdx(store())*100)}).`}</div></div>
     </div>
     <div class="nav"><button class="btn ghost" data-go="4">← Menüü</button><button class="btn ghost" data-go="0">Alusta otsast</button></div>`}
 ];
