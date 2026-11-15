@@ -8,6 +8,12 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 - `img/d0.jpg … img/d53.jpg` – toidufotod (Unsplash, tasuta litsents), 360×360.
   Fotode järjekord vastab massiivi `R` järjekorrale (`r.img = "img/d"+i+".jpg"`).
 
+- `manifest.json`, `sw.js`, `icons/`, `index.html` – iPhone'i avakuva-äpp (PWA). `sw.js` hoiab faile offline;
+  kui äppi muudad, suurenda `sw.js` failis `VERSION` numbrit. Ikoonid joonistab `node tools/make-icons.js`.
+- `.claude/launch.json` – kohalik eelvaade aadressil http://localhost:5173.
+- Värvid: `--primary` tomatipunane, `--accent` lehtroheline (CSS-i `:root` plokis, hele ja tume teema).
+- Menüü, ostetud tooted ja avatud samm salvestatakse `localStorage`-isse (`savePlan`/`restorePlan`).
+
 ## Andmed skriptis
 - `ING` – koostisosad: ühik, toiteväärtus (100 g/ml või 1 tk kohta: kcal, valk, süsivesikud, rasv, kiudained),
   kategooria, müügiviis (`p` pakend, `pc` tükk, `kg` kaalukaup), pakendi suurus, hinnad `[soodne, keskmine, premium]`,
