@@ -564,7 +564,9 @@ const KEY="toiduplaan-v3";
 const def={store:"",tier:"",tastes:{},people:2,slots:{hommik:true,louna:true,ohtu:true},persons:[]};
 let S=load(), step=0, plan=[], got=new Set();
 // iga inimese nimi ja päevane kalorieesmärk (0 = tavaline portsjon)
-function syncPersons(){if(!Array.isArray(S.persons))S.persons=[];while(S.persons.length<S.people)S.persons.push({name:"",kcal:0});S.persons.length=S.people}
+// vaikimisi 2000 kcal (keskmine täiskasvanu); vanad salvestused, kus eesmärk puudus, saavad samuti 2000
+const KCAL_DEFAULT=2000;
+function syncPersons(){if(!Array.isArray(S.persons))S.persons=[];while(S.persons.length<S.people)S.persons.push({name:"",kcal:KCAL_DEFAULT});S.persons.length=S.people;S.persons.forEach(p=>{if(!p.kcal)p.kcal=KCAL_DEFAULT})}
 syncPersons();
 // menüü, ostetud tooted ja avatud leht jäävad alles ka pärast äpi sulgemist
 function savePlan(){
@@ -601,11 +603,11 @@ const slotCount=()=>SLOTS.filter(([k])=>S.slots[k]).length;
 // ---------- Kalorieesmärk ----------
 // Päeva kalorid jagunevad söögikordade vahel nii; plaanist välja jäetud söögikorra osa jääb plaanist välja.
 const SHARE={hommik:.25,louna:.375,ohtu:.375};
-const KCAL_PRESETS=[[0,"Tavaline portsjon"],[1500,"1500"],[1800,"1800"],[2000,"2000"],[2500,"2500"],[3000,"3000"]];
+const KCAL_PRESETS=[[1600,"1600 · kaalu langetamiseks"],[2000,"2000 · keskmine naine"],[2500,"2500 · keskmine mees"],[3000,"3000 · palju liikumist"]];
 const pname=i=>(S.persons[i]?.name||"").trim()||`${i+1}. inimene`;
 const anyTarget=()=>S.persons.some(p=>p.kcal>0);
 // mitu portsjonit inimene p sellest toidust sööb
-function fac(r,k,p){const t=S.persons[p]?.kcal||0;if(!t)return 1;return Math.min(2.2,Math.max(.5,t*SHARE[k]/r.mac[0]))}
+function fac(r,k,p){const t=S.persons[p]?.kcal||KCAL_DEFAULT;return Math.min(3,Math.max(.6,t*SHARE[k]/r.mac[0]))}
 // kõigi inimeste portsjonid kokku
 const pm=(r,k)=>S.persons.reduce((a,_,p)=>a+fac(r,k,p),0);
 const mealCost=(r,k)=>price(r)*pm(r,k);
@@ -654,6 +656,10 @@ function pick(kind,avoid,di,have){
   const c=candidates(kind,di); if(!c.length) return null;
   let pool=c.filter(x=>!avoid.has(x.r.n)); if(!pool.length) pool=c;
   if(have) pool=pool.map(p=>({r:p.r,w:p.w*(1+.9*Math.min(4,p.r.i.filter(([n])=>have.has(n)&&!PANTRY.includes(n)).length))}));
+  // kalorieesmärk: kui toidu portsjonit peaks liiga palju suurendama või vähendama, eelista teisi toite
+  const share=kind==="hommik"?SHARE.hommik:SHARE.louna, ts=S.persons.map(p=>p.kcal||KCAL_DEFAULT), hi=Math.max(...ts), lo=Math.min(...ts);
+  const fit=pool.map(p=>({r:p.r,w:p.w*((hi*share/p.r.mac[0]>2.4||lo*share/p.r.mac[0]<.65)?.04:1)}));
+  if(fit.some(p=>p.w>=pool.find(q=>q.r===p.r).w))pool=fit;
   let x=Math.random()*pool.reduce((a,p)=>a+p.w,0);
   for(const p of pool){x-=p.w;if(x<=0)return p.r} return pool[pool.length-1].r;
 }
@@ -726,11 +732,11 @@ const PAGES=[
     <div class="box"><p class="label">Mitu inimest sööb?</p>
       <div class="stepper"><button data-people="-1" aria-label="Vähem inimesi">−</button><output>${S.people}</output><button data-people="1" aria-label="Rohkem inimesi">+</button></div></div>
     <div class="box"><p class="label">Mitu kalorit päevas?</p>
-      <p class="hint">Iga inimene saab valida oma päevase eesmärgi. Portsjonid tehakse selle järgi suuremaks või väiksemaks. „Tavaline portsjon” tähendab retsepti tavalist kogust.</p>
+      <p class="hint">Täiskasvanu vajab keskmiselt umbes 2000 kcal (naised) kuni 2500 kcal (mehed) päevas, aktiivselt liikudes rohkem. Portsjonid tehakse iga inimese eesmärgi järgi suuremaks või väiksemaks.</p>
       ${S.persons.map((p,i)=>`<div class="person">
         <div class="person-h"><input type="text" id="name-${i}" data-name="${i}" value="${(p.name||"").replace(/"/g,"&quot;")}" placeholder="${i+1}. inimene" aria-label="${i+1}. inimese nimi" maxlength="20">
-          <label class="kcal-in"><input type="number" id="kcal-${i}" data-kcal="${i}" min="1000" max="5000" step="50" value="${p.kcal||""}" placeholder="—" aria-label="${pname(i)} kalorid päevas"><span>kcal päevas</span></label></div>
-        <div class="chips small">${KCAL_PRESETS.map(([v,l])=>`<button class="chip" data-kp="${i}|${v}" data-s="${(p.kcal||0)===v?"like":""}">${l}</button>`).join("")}</div>
+          <label class="kcal-in"><input type="number" id="kcal-${i}" data-kcal="${i}" min="1200" max="5000" step="50" value="${p.kcal||KCAL_DEFAULT}" aria-label="${pname(i)} kalorid päevas"><span>kcal päevas</span></label></div>
+        <div class="chips small">${KCAL_PRESETS.map(([v,l])=>`<button class="chip" data-kp="${i}|${v}" data-s="${p.kcal===v?"like":""}">${l}</button>`).join("")}</div>
       </div>`).join("")}
       <p class="hint">Jagunemine: hommikusöök 25%, lõunasöök 37,5% ja õhtusöök 37,5% päeva kaloritest.</p></div>
     <div class="box"><p class="label">Millised söögikorrad plaani?</p>
@@ -890,7 +896,7 @@ document.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset.slot){S.slots[t.dataset.slot]=t.checked;save();render()}
   if(t.id==="quick"){S.quick=t.checked;save();render()}
-  if(t.dataset.kcal!==undefined){const v=Math.round(+t.value||0);S.persons[+t.dataset.kcal].kcal=v?Math.min(5000,Math.max(1000,v)):0;save();render()}
+  if(t.dataset.kcal!==undefined){const v=Math.round(+t.value||0);S.persons[+t.dataset.kcal].kcal=v?Math.min(5000,Math.max(1200,v)):KCAL_DEFAULT;save();render()}
   if(t.dataset.name!==undefined){S.persons[+t.dataset.name].name=t.value.trim().slice(0,20);save();render()}
   if(t.dataset.key){
     t.checked?got.add(t.dataset.key):got.delete(t.dataset.key);t.closest(".ln").classList.toggle("got",t.checked);

@@ -1,6 +1,6 @@
 // Teenustöötaja: hoiab äpi ja fotod telefoni mälus, et äpp töötaks ka ilma internetita.
 // Kui muudad äppi, suurenda VERSION numbrit – siis laaditakse uued failid.
-const VERSION = "toiduplaan-v3";
+const VERSION = "toiduplaan-v4";
 const FILES = ["./", "./toiduplaan.html", "./manifest.json",
   "./icons/apple-touch-icon.png", "./icons/icon-192.png", "./icons/icon-512.png",
   ...Array.from({ length: 69 }, (_, i) => `./img/d${i}.jpg`)];

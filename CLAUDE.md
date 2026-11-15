@@ -37,8 +37,8 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 - `R` – retseptid: nimi, söögikord (`hommik`/`pea`), maitsesildid, aeg, koostisosad portsjoni kohta, valmistamise sammud.
   Retsepti nimi ja koostisosad peavad vastama täpselt fotole.
 - Makrod ja maitsesildid (kana, kala jne) arvutatakse koostisosadest automaatselt.
-- `S.persons` – iga inimese nimi ja päevane kalorieesmärk (0 = tavaline portsjon). Portsjoni kordaja
-  `fac(r,k,p)` = eesmärk × `SHARE[söögikord]` / retsepti kcal, piiratud vahemikku 0,5–2,2.
+- `S.persons` – iga inimese nimi ja päevane kalorieesmärk (vaikimisi `KCAL_DEFAULT` = 2000). Portsjoni kordaja
+  `fac(r,k,p)` = eesmärk × `SHARE[söögikord]` / retsepti kcal, piiratud vahemikku 0,6–3; `pick` eelistab toite, mille portsjon ei pea liiga palju muutuma.
   Hinnad, ostunimekiri ja retseptiakna kogused arvestavad kõigi inimeste portsjonite summat `pm(r,k)`.
 
 ## Reeglid
