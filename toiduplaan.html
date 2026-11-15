@@ -1,0 +1,578 @@
+<title>Nädala Toiduplaan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: samm-sammuline viisard – üks küsimus lehe kohta, sammuriba üleval, edasi/tagasi all; viimased lehed: menüü ja tšekk-stiilis ostunimekiri */
+:root{
+  --bg:#f3f5ef; --surface:#ffffff; --ink:#1c2a22; --muted:#5f6d63; --line:#dfe4da;
+  --forest:#1f4a33; --forest-soft:#e3ece5; --mustard:#d99a1e; --mustard-soft:#fbf0d6;
+  --no:#b5402f; --no-soft:#f7e3df; --paper:#fffdf6; --on-forest:#f3f5ef;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121915; --surface:#1a231e; --ink:#e6ece6; --muted:#9aa89f; --line:#2c3831;
+  --forest:#7cc49a; --forest-soft:#20352a; --mustard:#f0b743; --mustard-soft:#3a2f17;
+  --no:#ef8a78; --no-soft:#3d221d; --paper:#1e2620; --on-forest:#0f1612; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121915; --surface:#1a231e; --ink:#e6ece6; --muted:#9aa89f; --line:#2c3831;
+  --forest:#7cc49a; --forest-soft:#20352a; --mustard:#f0b743; --mustard-soft:#3a2f17;
+  --no:#ef8a78; --no-soft:#3d221d; --paper:#1e2620; --on-forest:#0f1612; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+.wrap.wide{max-width:1180px}
+.brand{font-family:var(--f-display);font-weight:800;font-size:18px;letter-spacing:-.01em;margin:0}
+.brand span{color:var(--forest)}
+
+/* sammuriba */
+.steps{display:flex;gap:6px;list-style:none;margin:0;padding:0;overflow-x:auto}
+.steps li{flex:1 1 0;min-width:72px}
+.steps button{width:100%;border:0;background:none;color:var(--muted);font:inherit;font-size:12.5px;cursor:pointer;padding:0;text-align:left;display:flex;flex-direction:column;gap:6px}
+.steps button::before{content:"";display:block;height:4px;border-radius:2px;background:var(--line)}
+.steps button.done::before{background:var(--forest)}
+.steps button.cur{color:var(--ink);font-weight:600}
+.steps button.cur::before{background:var(--mustard)}
+.steps button:disabled{cursor:default}
+
+.page{display:flex;flex-direction:column;gap:20px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin:0}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1.08;margin:0;letter-spacing:-.02em;text-wrap:balance}
+.lead{color:var(--muted);margin:0;max-width:60ch}
+h2{font-family:var(--f-display);font-weight:700;font-size:20px;margin:0}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:0 0 10px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.card{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:16px;cursor:pointer;text-align:left;font:inherit;display:flex;flex-direction:column;gap:4px;min-width:0}
+.card b{font-family:var(--f-display);font-weight:700;font-size:20px}
+.card small{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.card p{margin:4px 0 0;color:var(--ink);font-size:15px;line-height:1.45}
+.card .price{font-family:var(--f-display);font-weight:800;font-size:34px;line-height:1.05;font-variant-numeric:tabular-nums;color:var(--forest);margin-top:6px}
+.card .price-sub{font-size:14px;color:var(--muted);display:block}
+.card .prices{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:4px}
+.card .prices > span{display:flex;flex-direction:column}
+.card .price{font-size:30px !important}
+.card .tier-week{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:15px;color:var(--ink);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.card .tier-week b{font-variant-numeric:tabular-nums}
+.tgroup{display:flex;flex-direction:column;gap:10px}
+.tgroup h2{font-size:16px}
+.card[aria-pressed="true"]{border-color:var(--forest);background:var(--forest-soft);box-shadow:inset 0 0 0 1px var(--forest)}
+.card:hover{border-color:var(--forest)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:15px;padding:8px 14px;border-radius:999px;cursor:pointer}
+.chip[data-s="like"]{background:var(--forest-soft);border-color:var(--forest);color:var(--forest);font-weight:600}
+.chip[data-s="no"]{background:var(--no-soft);border-color:var(--no);color:var(--no);text-decoration:line-through}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.legend span b{color:var(--forest)} .legend span i{color:var(--no);font-style:normal;font-weight:600}
+
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;width:max-content}
+.stepper button{border:0;background:var(--bg);color:var(--ink);width:48px;height:48px;font-size:22px;cursor:pointer}
+.stepper output{min-width:56px;text-align:center;font-family:var(--f-display);font-weight:700;font-size:24px}
+.checks{display:flex;flex-direction:column;gap:10px}
+.checks label{display:flex;gap:10px;align-items:center;cursor:pointer;font-size:16px}
+.checks input{accent-color:var(--forest);width:20px;height:20px}
+
+.nav{display:flex;justify-content:space-between;gap:12px;padding-top:8px}
+.btn{border:0;background:var(--forest);color:var(--on-forest);font:inherit;font-weight:600;padding:13px 22px;border-radius:12px;cursor:pointer;font-size:15px}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible,input:focus-visible{outline:2px solid var(--mustard);outline-offset:2px}
+
+.summary{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:baseline;padding:16px 20px;background:var(--mustard-soft);border-radius:14px}
+.summary .big{font-family:var(--f-display);font-weight:800;font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+.summary .k{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.summary .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.summary > div{display:flex;flex-direction:column;gap:4px}
+
+.week{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.day-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.day-h h3{font-family:var(--f-display);font-weight:700;font-size:17px;margin:0}
+.day-h span{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.meal{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:6px 12px;align-items:center;padding-top:10px;border-top:1px dashed var(--line)}
+.meal .slot{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;grid-column:1/-1}
+.meal .pic img{width:96px;height:96px;display:block;object-fit:cover;border-radius:10px;background:var(--forest-soft)}
+.credit{font-size:12.5px;color:var(--muted);margin:0}
+.meal .txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.meal .name{font-weight:600;line-height:1.3}
+.meal .meta{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.swap{align-self:center;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px}
+.swap:hover{border-color:var(--forest);color:var(--forest)}
+.empty{padding:24px;border:1.5px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+
+.receipt{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:24px 22px 28px;font-family:var(--f-mono);font-size:13.5px;max-width:520px;width:100%;box-shadow:0 6px 18px -10px rgba(0,0,0,.25)}
+.receipt .rh{text-align:center;border-bottom:1px dashed var(--muted);padding-bottom:12px;margin-bottom:10px}
+.receipt .rh b{font-size:16px;letter-spacing:.1em}
+.receipt .cat{margin:14px 0 4px;font-weight:500;color:var(--muted);text-transform:uppercase;font-size:11.5px;letter-spacing:.1em}
+.receipt .ln{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:8px;align-items:baseline;cursor:pointer;padding:2px 0}
+.receipt .ln input{accent-color:var(--forest);margin:0}
+.receipt .ln.got span{text-decoration:line-through;color:var(--muted)}
+.receipt .qty{font-variant-numeric:tabular-nums;white-space:nowrap}
+.receipt .tot{border-top:1px dashed var(--muted);margin-top:16px;padding-top:10px;display:flex;justify-content:space-between;font-weight:500}
+.receipt .note{color:var(--muted);font-size:11.5px;margin-top:10px;text-align:center}
+.receipt .ln small{grid-column:2/-1;color:var(--muted);font-size:11.5px;margin-top:-2px}
+.receipt .pr{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted);font-size:12px}
+
+/* toidukaart avab retsepti */
+.open{display:contents;cursor:pointer}
+.meal .pic,.meal .txt{cursor:pointer}
+.meal .txt .name{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.meal:hover .txt .name{text-decoration-color:var(--forest)}
+
+/* retseptiaken */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(10,20,14,.55);display:flex;align-items:flex-end;justify-content:center;
+  padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) 0 env(safe-area-inset-left,0px)}
+@media (min-width:700px){.modal{align-items:center;padding:24px}}
+.sheet{background:var(--surface);color:var(--ink);width:100%;max-width:720px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;display:flex;flex-direction:column}
+@media (min-width:700px){.sheet{border-radius:18px}}
+.sheet .hero{position:relative}
+.sheet .hero img{width:100%;height:240px;object-fit:cover;display:block}
+.sheet .x{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.sheet .body{padding:20px max(20px,env(safe-area-inset-left,0px)) calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px}
+.sheet h2{font-size:26px;line-height:1.15;text-wrap:balance}
+.facts{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.macros{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+@media (max-width:480px){.macros{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.mac{background:var(--bg);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:2px}
+.mac b{font-family:var(--f-display);font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.mac span{font-size:12px;color:var(--muted)}
+.mac i{display:block;height:4px;border-radius:2px;background:var(--line);margin-top:6px;overflow:hidden}
+.mac i::after{content:"";display:block;height:100%;width:var(--w);background:var(--c,var(--forest))}
+.ing{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ing li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.ing li span:last-child{font-family:var(--f-mono);font-size:13.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.how{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px}
+.how li{padding-left:4px;line-height:1.5}
+.how li::marker{font-family:var(--f-display);font-weight:700;color:var(--forest)}
+.sheet .note{font-size:12.5px;color:var(--muted);margin:0}
+@media (prefers-reduced-motion:no-preference){.page{animation:in .3s ease both}@keyframes in{from{transform:translateY(6px)}to{transform:none}}}
+</style>
+
+<div class="wrap" id="wrap">
+  <p class="brand">Nädala <span>toiduplaan</span></p>
+  <ol class="steps" id="steps"></ol>
+  <div id="view"></div>
+</div>
+<div id="modal" hidden></div>
+
+<script>
+// ---------- Poed ja hinnaklassid ----------
+// Hinnad on kogutud Rimi e-poest 9.11.2026. Teiste poodide hinnad = Rimi hind × poe hinnaindeks (hinnang).
+const PRICE_DATE="9.11.2026";
+const STORES=[
+  {id:"lidl",name:"Lidl",idx:.88},{id:"maxima",name:"Maxima",idx:.95},{id:"prisma",name:"Prisma",idx:.99},
+  {id:"rimi",name:"Rimi",idx:1.00},{id:"selver",name:"Selver",idx:1.01},{id:"coop",name:"Coop",idx:1.03}];
+const TIERS=[
+  {id:"soodne",ti:0,name:"Soodne",desc:"Poe oma brändi ja odavaimad tooted. Rohkem kaunvilju, mune ja kana.",max:2.6},
+  {id:"keskmine",ti:1,name:"Keskmine",desc:"Tavalised kaubamärgid. Kala paar korda nädalas.",max:4.2},
+  {id:"premium",ti:2,name:"Premium",desc:"Parimad tooted ja mahe valik. Rohkem lõhet, krevette ja veiseliha.",max:99}];
+const NUM=["","ühele","kahele","kolmele","neljale","viiele","kuuele","seitsmele","kaheksale","üheksale","kümnele"];
+const forN=n=>`${NUM[n]||n} inimesele`;
+
+// ---------- Koostisosad ----------
+// [ühik, toiteväärtus 100 g/ml kohta (tk puhul 1 tk kohta): kcal, valk, süsivesikud, rasv, kiudained, kategooria,
+//   müügiviis: "p" pakend | "pc" tükk | "kg" kaalukaup, pakendi suurus, hinnad [soodne, keskmine, premium], pakendi nimi, hinnanguline?]
+const ING={
+ "kaerahelbed":["g",[372,13,60,7,10],"T","p",500,[.34,1.09,1.29],"Kaerahelbed"],
+ "kreeka jogurt":["g",[97,9,4,5,0],"P","p",400,[.89,1.83,1.83],"Kreeka jogurt maitsestamata"],
+ "vaarikad":["g",[52,1.2,12,.7,6.5],"K","p",400,[4.99,4.99,5.49],"Vaarikad, külmutatud"],
+ "piim":["ml",[52,3.3,4.8,2.5,0],"P","p",1000,[.75,1.25,1.29],"Piim 2,5%"],
+ "granola":["g",[450,9,62,17,7],"T","p",350,[2.65,2.79,3.10],"Granola"],
+ "kiivi":["tk",[46,.8,11,.4,2.3],"K","pc",1,[.37,.37,.90],"Kiivi"],
+ "mandlid":["g",[579,21,22,50,12],"T","p",300,[3.99,3.99,4.11],"Mandlid"],
+ "täisteraleib":["g",[220,7,40,2,9],"T","p",390,[1.09,1.35,1.35],"Täistera rukkileib"],
+ "avokaado":["tk",[240,3,13,22,10],"K","pc",1,[.95,.95,2.09],"Avokaado"],
+ "munad":["tk",[78,6.5,.5,5.3,0],"P","p",10,[1.59,2.49,3.59],"Kanamunad"],
+ "tšillihelbed":["g",[300,12,50,14,30],"M","p",28,[2.39,2.39,2.39],"Tšillihelbed"],
+ "spinat":["g",[23,2.9,3.6,.4,2.2],"K","p",100,[1.59,1.59,2.45],"Beebispinat"],
+ "oliiviõli":["ml",[820,0,0,92,0],"M","p",500,[4.99,4.99,9.79],"Oliiviõli"],
+ "chia seemned":["g",[486,17,42,31,34],"T","p",150,[1.79,1.79,3.42],"Chia seemned"],
+ "kaerajook":["ml",[46,1,6.7,1.5,.8],"M","p",1000,[1.99,1.99,2.55],"Kaerajook"],
+ "mango":["tk",[180,2.4,45,1.2,4.8],"K","pc",1,[3.99,3.99,3.99],"Mango"],
+ "münt":["g",[44,3.3,8,.7,6.8],"K","p",20,[2.39,2.39,2.39],"Münt potis",1],
+ "maasikad":["g",[32,.7,7.7,.3,2],"K","p",500,[3.49,3.99,3.99],"Maasikad"],
+ "mustikad":["g",[57,.7,14,.3,2.4],"K","p",400,[3.59,3.59,7.99],"Mustikad"],
+ "banaan":["tk",[107,1.3,27,.4,3.1],"K","pc",1,[.16,.16,.36],"Banaan"],
+ "mesi":["g",[304,.3,82,0,0],"M","p",450,[4.90,5.89,6.74],"Mesi"],
+ "nisujahu":["g",[340,10,71,1.2,3],"T","p",1000,[1.09,1.09,1.09],"Nisujahu"],
+ "kanafilee":["g",[110,23,0,1.5,0],"L","p",400,[3.74,4.69,4.69],"Kanafilee"],
+ "punased oad":["g",[110,7.5,15,.5,6],"T","p",240,[.99,.99,1.79],"Punased oad, konserv"],
+ "mais":["g",[86,3,16,1.2,2.4],"K","p",285,[1.79,1.79,2.09],"Mais, konserv"],
+ "kirsstomatid":["g",[18,.9,3.9,.2,1.2],"K","p",250,[2.49,2.49,2.49],"Kirsstomatid"],
+ "punane kapsas":["g",[31,1.4,7,.2,2.1],"K","kg",1000,[1.19,1.19,1.19],"Punane kapsas"],
+ "salatisegu":["g",[15,1.4,2.9,.2,1.3],"K","p",150,[1.89,1.89,1.89],"Salatisegu"],
+ "suvikõrvits":["tk",[43,3,7.8,.8,2.5],"K","pc",1,[.60,.60,1.79],"Suvikõrvits"],
+ "paprika":["tk",[56,1.8,11,.5,3.8],"K","pc",1,[.48,.48,.83],"Paprika"],
+ "porgand":["tk",[33,.7,8,.2,2.2],"K","pc",1,[.04,.16,.22],"Porgand"],
+ "brokoli":["g",[34,2.8,7,.4,2.6],"K","p",350,[1.53,1.79,2.79],"Brokoli"],
+ "riis":["g",[360,7,79,.6,1.3],"T","p",800,[.79,1.98,4.40],"Riis"],
+ "roheline sibul":["g",[32,1.8,7,.2,2.6],"K","p",50,[.80,.80,.80],"Roheline sibul",1],
+ "sojakaste":["ml",[53,8,5,.6,0],"M","p",150,[2.29,2.29,2.95],"Sojakaste"],
+ "purustatud tomatid":["g",[24,1.2,4,.2,1.5],"K","p",400,[.94,1.59,1.69],"Tükeldatud tomatid"],
+ "naanileib":["tk",[235,8,40,5,2],"T","p",2,[2.49,2.49,2.49],"Naanileib",1],
+ "koriander":["g",[23,2,4,.5,3],"K","p",20,[2.39,2.39,2.39],"Koriander potis"],
+ "garam masala":["g",[380,15,50,15,20],"M","p",33,[1.79,1.79,1.79],"Garam masala"],
+ "kalkunihakkliha":["g",[115,22,0,3,0],"L","p",500,[3.99,5.89,5.89],"Kalkunihakkliha"],
+ "täisteraspagetid":["g",[350,13,65,2.5,8],"T","p",500,[.99,.99,1.49],"Täisteraspagetid"],
+ "basiilik":["g",[23,3,3,.6,1.6],"K","p",20,[2.49,2.49,2.49],"Basiilik potis"],
+ "mustad oad":["g",[130,8.5,21,.5,7],"T","p",240,[1.55,1.55,1.89],"Mustad oad, konserv"],
+ "laim":["tk",[20,.5,7,.1,1.8],"K","pc",1,[.35,.35,.35],"Laim"],
+ "kikerherned":["g",[140,7,18,2.5,6],"T","p",250,[.99,.99,1.79],"Kikerherned, konserv"],
+ "parmesan":["g",[400,33,0,29,0],"P","p",100,[3.00,4.29,4.29],"Parmesan"],
+ "veiseliha ribad":["g",[150,22,0,6.5,0],"L","p",400,[7.49,7.49,15.98],"Veiseliha strooganoviks"],
+ "jasmiiniriis":["g",[360,7,79,.6,1.3],"T","p",400,[1.39,1.39,1.83],"Jasmiiniriis"],
+ "veisehakkliha":["g",[165,20,0,9,0],"L","p",400,[3.55,4.79,5.49],"Veisehakkliha",1],
+ "kinoa":["g",[368,14,64,6,7],"T","p",400,[2.99,2.99,3.59],"Kinoa"],
+ "riivjuust":["g",[350,27,0,27,0],"P","p",150,[1.49,1.49,3.54],"Riivjuust"],
+ "lõhefilee":["g",[208,20,0,13,0],"L","p",400,[5.60,5.60,5.60],"Lõhefilee (u 400 g)"],
+ "sushiriis":["g",[360,7,79,.6,1.3],"T","p",400,[1.59,1.59,1.59],"Sushiriis"],
+ "kurk":["tk",[45,2,11,.3,1.5],"K","pc",1,[1.19,1.19,1.99],"Kurk"],
+ "edamame":["g",[121,12,9,5,5],"K","p",400,[2.55,2.55,3.64],"Edamame, külmutatud"],
+ "seesamiseemned":["g",[573,18,23,50,12],"T","p",100,[1.19,1.19,1.38],"Seesamiseemned"],
+ "tursafilee":["g",[82,18,0,.7,0],"L","p",400,[5.99,5.99,6.99],"Tursafilee, külmutatud",1],
+ "sidrun":["tk",[29,1.1,9,.3,2.8],"K","pc",1,[.21,.21,.43],"Sidrun"],
+ "petersell":["g",[36,3,6,.8,3.3],"K","p",30,[.73,.73,.73],"Petersell"],
+ "krevetid":["g",[85,20,0,.5,0],"L","p",400,[3.99,5.99,5.99],"Krevetid, kooritud"],
+ "fettuccine":["g",[360,13,70,3,3],"T","p",250,[2.29,2.29,2.35],"Fettuccine"],
+ "küüslauk":["g",[149,6,33,.5,2],"K","p",100,[.99,.99,.99],"Küüslauk"],
+ "punane sibul":["tk",[60,1.6,14,.2,2.6],"K","pc",1,[.21,.21,.21],"Punane sibul"],
+ "tortillad":["tk",[120,3.5,20,3,2.5],"T","p",8,[2.85,2.85,3.29],"Täistera tortillad"],
+ "fetajuust":["g",[260,14,1,21,0],"P","p",150,[1.46,2.99,3.35],"Fetajuust"],
+ "kookospiim":["ml",[70,.6,2,7,0],"M","p",400,[2.55,2.55,3.09],"Kookospiim (light)"],
+ "karripulber":["g",[325,14,58,14,53],"M","p",25,[.80,.80,1.05],"Karripulber"],
+ "bataat":["g",[86,1.6,20,.1,3],"K","kg",1000,[2.79,2.79,2.79],"Bataat"],
+ "pruun riis":["g",[360,7.5,76,2.7,3.4],"T","p",500,[1.99,1.99,1.99],"Pruun riis"],
+ "lehtkapsas":["g",[49,4.3,9,.9,3.6],"K","p",200,[3.49,3.49,3.49],"Lehtkapsas"],
+ "idud":["g",[30,3,4,.7,1.8],"K","p",140,[1.89,1.89,1.89],"Idud"],
+ "tofu":["g",[120,13,2,7,1],"M","p",180,[1.49,1.49,2.12],"Tofu"],
+ "minimais":["g",[25,2,4,.3,2],"K","p",230,[1.99,1.99,1.99],"Minimais, konserv",1],
+ "šampinjonid":["g",[22,3,3,.3,1],"K","p",400,[2.29,2.29,2.29],"Šampinjonid"],
+ "valged oad":["g",[110,7,16,.5,6],"T","p",240,[.99,.99,.99],"Valged oad, konserv"],
+ "kartul":["g",[77,2,17,.1,2.2],"K","kg",1000,[.43,.99,1.40],"Kartul"],
+ "seller":["g",[16,.7,3,.2,1.6],"K","p",450,[1.99,1.99,1.99],"Varsseller"],
+ "falafel":["g",[330,13,32,18,6],"M","p",200,[3.59,3.59,3.59],"Falafel"],
+ "hummus":["g",[250,7,14,18,6],"M","p",175,[1.46,2.75,2.75],"Hummus"],
+ "tomat":["tk",[22,1.1,4.7,.2,1.4],"K","pc",1,[.21,.21,.48],"Tomat"],
+ "kodujuust":["g",[100,13,3,5,0],"P","p",500,[2.49,2.49,3.32],"Kodujuust"]
+};
+const CAT={L:"Liha ja kala",P:"Piim ja munad",K:"Puu- ja köögiviljad",T:"Teraviljad ja kaunviljad",M:"Muu"};
+
+// ---------- Retseptid (järjekord = fotod img/d0…d32) ----------
+// i: [koostisosa, kogus ühe portsjoni kohta]; h: valmistamise sammud
+const R=[
+ {n:"Üleöö kaer vaarikate ja jogurtiga",s:"hommik",t:["piim"],m:5,i:[["kaerahelbed",50],["kreeka jogurt",150],["vaarikad",80],["piim",50]],
+  h:["Sega purgis kaerahelbed, piim ja pool jogurtist.","Lisa peale ülejäänud jogurt ja vaarikad.","Pane kaanega külmkappi üleöö (vähemalt 6 tundi)."]},
+ {n:"Jogurti-granola parfee kiivi ja mandlitega",s:"hommik",t:["piim"],m:5,i:[["kreeka jogurt",200],["granola",40],["kiivi",1],["mandlid",10]],
+  h:["Pane klaasi põhja pool jogurtist.","Lisa granola ja ülejäänud jogurt.","Kaunista kiiviviilude ja hakitud mandlitega."]},
+ {n:"Avokaadoröstsai poššeeritud munaga",s:"hommik",t:["munad","koogiviljad"],m:10,i:[["täisteraleib",40],["avokaado",.5],["munad",1],["tšillihelbed",.5]],
+  h:["Rösti leivaviil.","Purusta avokaado kahvliga, maitsesta soola ja pipraga ning määri leivale.","Aja vesi keema, keeruta veekeeris ja poššeeri muna 3–4 minutit.","Tõsta muna leivale ja puista peale tšillihelbeid."]},
+ {n:"Spinatiomlett",s:"hommik",t:["munad","koogiviljad"],m:10,i:[["munad",3],["spinat",50],["oliiviõli",5]],
+  h:["Klopi munad soola ja pipraga lahti.","Kuumuta õli pannil ja närvuta spinatit 1 minut.","Vala munad peale ja küpseta tasasel tulel, kuni pealt hangub.","Murra omlett pooleks ja serveeri."]},
+ {n:"Chia-puding mangopüreega",s:"hommik",t:["taimne"],m:5,i:[["chia seemned",30],["kaerajook",200],["mango",.5],["münt",1]],
+  h:["Sega chia seemned kaerajoogiga, lase 10 minutit seista ja sega uuesti.","Pane vähemalt 2 tunniks külmkappi.","Püreesta mango ja vala pudingu peale.","Kaunista mündilehtedega."]},
+ {n:"Maasika-mustika-banaanikauss",s:"hommik",t:["taimne"],m:5,i:[["maasikad",100],["mustikad",80],["banaan",1]],
+  h:["Pese marjad ja poolita maasikad.","Viiluta banaan.","Tõsta kõik kaussi."]},
+ {n:"Maasikad vahustatud jogurti ja mündiga",s:"hommik",t:["piim"],m:5,i:[["maasikad",150],["kreeka jogurt",150],["mesi",10],["münt",1]],
+  h:["Pese ja poolita maasikad.","Vahusta jogurt meega kohevaks.","Tõsta maasikad kaussi, jogurt peale ja kaunista mündiga."]},
+ {n:"Pannkoogid banaani, mustikate ja meega",s:"hommik",t:["munad","piim"],m:20,i:[["nisujahu",60],["piim",150],["munad",1],["banaan",.5],["mustikad",40],["mesi",10],["oliiviõli",3]],
+  h:["Klopi muna, piim, jahu ja näpuotsatäis soola ühtlaseks taignaks.","Kuumuta pann õliga ja küpseta väikesed pannkoogid mõlemalt poolt kuldseks.","Laota virna, lisa banaaniviilud ja mustikad ning nirista peale mett."]},
+ {n:"Kaerapuder maasikate ja mustikatega",s:"hommik",t:["piim"],m:10,i:[["kaerahelbed",60],["piim",250],["maasikad",50],["mustikad",50]],
+  h:["Aja piim keema ja lisa kaerahelbed ning näpuotsatäis soola.","Keeda segades 5 minutit.","Tõsta kaussi ja lisa peale maasikad ja mustikad."]},
+ {n:"Kana-oa kauss maisi ja tomatitega",s:"pea",t:["kaunviljad","koogiviljad","mehhiko"],m:25,i:[["kanafilee",130],["punased oad",100],["mais",60],["kirsstomatid",100],["punane kapsas",50],["salatisegu",30],["oliiviõli",5]],
+  h:["Lõika kanafilee kuubikuteks, maitsesta ja prae õlis küpseks (6–8 minutit).","Loputa oad ja mais, poolita tomatid ja haki kapsas peeneks.","Laota kaussi salat ja kõik komponendid eraldi hunnikutena, kana peale."]},
+ {n:"Grillkana röstitud köögiviljadega",s:"pea",t:["koogiviljad","vahemere"],m:40,i:[["kanafilee",160],["suvikõrvits",.5],["paprika",.5],["porgand",1],["brokoli",80],["kirsstomatid",60],["oliiviõli",10]],
+  h:["Kuumuta ahi 200 °C-ni.","Lõika köögiviljad tükkideks, sega õli, soola ja pipraga ning laota ahjuplaadile.","Küpseta köögivilju 20–25 minutit.","Maitsesta kanafilee ja grilli pannil 5–6 minutit mõlemalt poolt. Serveeri koos köögiviljadega."]},
+ {n:"Kana-praeriis brokoli ja munaga",s:"pea",t:["koogiviljad","aasia"],m:25,i:[["kanafilee",120],["riis",80],["munad",1],["brokoli",100],["roheline sibul",10],["sojakaste",15],["oliiviõli",5]],
+  h:["Keeda riis ja lase jahtuda (eilne riis sobib kõige paremini).","Prae kanaribad õlis küpseks, lisa brokoli ja prae veel 3 minutit.","Lükka kõik panni serva, klopi muna sisse ja sega puruks.","Lisa riis ja sojakaste ning prae kõrgel kuumusel 2–3 minutit. Puista peale rohelist sibulat."]},
+ {n:"Kanatikka masala naaniga",s:"pea",t:["vurts"],m:40,i:[["kanafilee",150],["purustatud tomatid",150],["kreeka jogurt",60],["naanileib",1],["koriander",3],["garam masala",3],["küüslauk",5]],
+  h:["Sega kanatükid poole jogurti, hakitud küüslaugu ja garam masalaga. Lase 15 minutit seista.","Prae kana pannil pruuniks.","Lisa tomatid ja hauta 15 minutit.","Sega sisse ülejäänud jogurt, puista peale koriandrit ja serveeri soojendatud naaniga."]},
+ {n:"Kalkunifrikadellid täisteraspagettidega",s:"pea",t:["vahemere"],m:35,i:[["kalkunihakkliha",150],["täisteraspagetid",90],["purustatud tomatid",150],["basiilik",2],["küüslauk",5],["oliiviõli",5]],
+  h:["Sega hakkliha küüslaugu, soola ja pipraga ning vormi pallid.","Prae pallid õlis igast küljest pruuniks.","Lisa tomatid ja hauta kaane all 15 minutit.","Keeda spagetid, sega kastmega ja kaunista basiilikuga."]},
+ {n:"Kana-burrito kauss mustade ubadega",s:"pea",t:["kaunviljad","mehhiko"],m:25,i:[["kanafilee",130],["riis",60],["mustad oad",100],["mais",50],["paprika",.5],["laim",.5]],
+  h:["Keeda riis.","Maitsesta kana, grilli 5–6 minutit mõlemalt poolt ja lõika ribadeks.","Soojenda oad ja mais, lõika paprika ribadeks.","Laota kaussi riis, oad, mais, paprika ja kana ning lisa laimiviil."]},
+ {n:"Kana-kikerhernesalat parmesani ja basiilikuga",s:"pea",t:["kaunviljad","koogiviljad","vahemere","piim"],m:25,i:[["kanafilee",140],["kikerherned",80],["kirsstomatid",80],["paprika",.5],["salatisegu",30],["parmesan",15],["basiilik",2],["oliiviõli",10]],
+  h:["Prae maitsestatud kanafilee küpseks ja lõika tükkideks.","Loputa kikerherned, poolita tomatid ja lõika paprika.","Sega salat, köögiviljad ja kikerherned õliga.","Tõsta peale kana, parmesanilaastud ja basiilikulehed."]},
+ {n:"Veiseliha brokoliga riisi peal",s:"pea",t:["koogiviljad","aasia"],m:25,i:[["veiseliha ribad",130],["brokoli",150],["jasmiiniriis",70],["sojakaste",15],["küüslauk",5],["oliiviõli",5]],
+  h:["Keeda riis.","Prae liharibasid väga kuumal pannil õlis 2 minutit ja tõsta kõrvale.","Prae brokolit ja küüslauku 3 minutit.","Lisa liha ja sojakaste, sega läbi ja serveeri riisi peal."]},
+ {n:"Tšilli con carne maisi ja ubadega",s:"pea",t:["kaunviljad","mehhiko","vurts"],m:40,i:[["veisehakkliha",110],["punased oad",100],["mais",50],["paprika",.5],["purustatud tomatid",150],["punane sibul",.25],["tšillihelbed",1]],
+  h:["Prae hakitud sibul ja hakkliha pruuniks.","Lisa kuubikuteks lõigatud paprika ja tšillihelbed.","Lisa tomatid, oad ja mais ning hauta 25 minutit.","Maitsesta soola ja pipraga."]},
+ {n:"Täidetud paprikad sulajuustuga",s:"pea",t:["koogiviljad"],m:45,i:[["paprika",1.5],["veisehakkliha",110],["kinoa",40],["riivjuust",30],["purustatud tomatid",80]],
+  h:["Kuumuta ahi 190 °C-ni ja keeda kinoa.","Prae hakkliha ning sega kinoa ja poolte tomatitega.","Lõika paprikatelt kaas, eemalda seemned ja täida seguga.","Vala ülejäänud tomatid vormi põhja, puista paprikatele juust ja küpseta 30 minutit."]},
+ {n:"Lõhe brokoli ja riisiga",s:"pea",t:["koogiviljad","aasia"],m:25,i:[["lõhefilee",150],["brokoli",100],["jasmiiniriis",70],["koriander",2],["sojakaste",10]],
+  h:["Keeda riis.","Maitsesta lõhe ja prae nahk all 4 minutit, keera ümber ja prae veel 3 minutit.","Keeda brokolit 4 minutit.","Serveeri lõhe riisi ja brokoliga, puista peale koriandrit ja nirista sojakastet."]},
+ {n:"Lõhe poke-kauss",s:"pea",t:["aasia"],m:20,i:[["lõhefilee",130],["sushiriis",70],["kurk",.3],["edamame",50],["mais",40],["porgand",.5],["seesamiseemned",3],["sojakaste",15]],
+  h:["Keeda sushiriis ja lase jahtuda.","Lõika lõhe kuubikuteks ja sega poole sojakastmega.","Viiluta kurk, riivi porgand ja keeda edamamet 3 minutit.","Laota kaussi riis ja peale kõik komponendid. Puista üle seesamiseemnetega."]},
+ {n:"Ahjutursk tomatite ja sidruniga",s:"pea",t:["koogiviljad","vahemere"],m:25,i:[["tursafilee",170],["kirsstomatid",100],["sidrun",.5],["petersell",5],["oliiviõli",10]],
+  h:["Kuumuta ahi 200 °C-ni.","Pane kala vormi ning maitsesta soola, pipra ja õliga.","Lisa tomatid ja sidruniviilud.","Küpseta 15–18 minutit ja puista peale peterselli."]},
+ {n:"Krevetid küüslaugu ja fettuccinega",s:"pea",t:["vahemere"],m:20,i:[["krevetid",130],["fettuccine",90],["küüslauk",10],["petersell",5],["parmesan",15],["oliiviõli",10]],
+  h:["Keeda pasta pakendi juhise järgi.","Prae küüslauku õlis 1 minut, lisa krevetid ja prae 3 minutit.","Lisa pannile pasta ja natuke keeduvett.","Lisa parmesan ja petersell ning sega läbi."]},
+ {n:"Kikerhernesalat paprika ja kurgiga",s:"pea",t:["taimne","kaunviljad","koogiviljad","vahemere"],m:15,i:[["kikerherned",150],["paprika",.5],["kurk",.5],["kirsstomatid",80],["punane sibul",.25],["sidrun",.25],["oliiviõli",10]],
+  h:["Loputa kikerherned.","Lõika paprika, kurk ja sibul väikesteks tükkideks ning poolita tomatid.","Sega kõik kokku õli, sidrunimahla, soola ja pipraga."]},
+ {n:"Kala-tacod avokaado ja fetaga",s:"pea",t:["mehhiko"],m:25,i:[["tursafilee",140],["tortillad",2],["avokaado",.5],["fetajuust",30],["laim",.5],["oliiviõli",5]],
+  h:["Maitsesta kala, prae õlis 3 minutit mõlemalt poolt ja murra tükkideks.","Soojenda tortillad kuival pannil.","Lõika avokaado kuubikuteks.","Täida tortillad kala ja avokaadoga, puista peale fetat ja pigista üle laimimahlaga."]},
+ {n:"Kikerherne-spinati kookoskarri",s:"pea",t:["taimne","kaunviljad","koogiviljad","vurts"],m:30,i:[["kikerherned",150],["spinat",60],["kookospiim",100],["purustatud tomatid",100],["punane sibul",.25],["küüslauk",5],["karripulber",3],["laim",.5]],
+  h:["Prae hakitud sibul ja küüslauk, lisa karripulber ja prae 1 minut.","Lisa tomatid, kookospiim ja kikerherned ning hauta 15 minutit.","Sega sisse spinat ja lase sel närbuda.","Serveeri laimiviiluga."]},
+ {n:"Bataadi-riisikauss feta ja idudega",s:"pea",t:["koogiviljad","piim"],m:35,i:[["bataat",200],["pruun riis",60],["lehtkapsas",50],["fetajuust",40],["idud",20],["oliiviõli",10]],
+  h:["Kuumuta ahi 200 °C-ni. Lõika bataat kuubikuteks, sega õliga ja rösti 25 minutit.","Keeda pruun riis.","Haki lehtkapsas ja masseeri seda natukese õliga.","Laota kaussi riis, bataat, lehtkapsas, feta ja idud."]},
+ {n:"Tofu minimaisi ja seentega",s:"pea",t:["taimne","aasia","koogiviljad"],m:20,i:[["tofu",150],["minimais",80],["šampinjonid",100],["roheline sibul",10],["sojakaste",15],["küüslauk",5],["oliiviõli",5]],
+  h:["Kuivata tofu ja lõika kuubikuteks.","Prae tofu õlis krõbedaks ja tõsta kõrvale.","Prae seeni ja minimaisi 4 minutit ning lisa küüslauk.","Lisa tofu ja sojakaste, sega läbi ja puista peale rohelist sibulat."]},
+ {n:"Minestrone köögiviljasupp",s:"pea",t:["taimne","kaunviljad","vahemere","koogiviljad"],m:40,i:[["purustatud tomatid",200],["valged oad",80],["kartul",100],["porgand",1],["seller",50],["punane sibul",.25],["küüslauk",5],["oliiviõli",5],["sidrun",.25]],
+  h:["Prae hakitud sibul, küüslauk, porgand ja seller õlis 5 minutit.","Lisa kuubikuteks lõigatud kartul, tomatid ja 300 ml vett portsjoni kohta.","Keeda 20 minutit, lisa oad ja keeda veel 5 minutit.","Maitsesta ja serveeri sidruniga."]},
+ {n:"Falafeli kauss hummuse ja avokaadoga",s:"pea",t:["taimne","kaunviljad","vahemere"],m:30,i:[["falafel",100],["hummus",60],["avokaado",.5],["punane kapsas",60],["bataat",80],["oliiviõli",5]],
+  h:["Kuumuta ahi 200 °C-ni ja rösti bataadikuubikuid 25 minutit.","Soojenda falafelid ahjus 10 minutit.","Haki kapsas peeneks ja viiluta avokaado.","Määri kausi põhja hummus ja laota peale kõik komponendid."]},
+ {n:"Mustade ubade tacod pico de galloga",s:"pea",t:["taimne","kaunviljad","mehhiko"],m:20,i:[["mustad oad",120],["tortillad",2],["tomat",1],["punane sibul",.25],["koriander",3],["laim",.5]],
+  h:["Haki tomat, sibul ja koriander ning sega laimimahlaga (see on pico de gallo).","Soojenda oad soola ja pipraga.","Soojenda tortillad.","Täida tortillad ubade ja pico de galloga."]},
+ {n:"Shakshuka",s:"pea",t:["vahemere","koogiviljad","vurts"],m:25,i:[["munad",2],["purustatud tomatid",200],["paprika",.5],["punane sibul",.25],["küüslauk",5],["petersell",5],["oliiviõli",5]],
+  h:["Prae sibul, küüslauk ja paprika õlis 5 minutit.","Lisa tomatid, maitsesta ja hauta 10 minutit.","Tee kastmesse lohud ja löö munad sisse.","Küpseta kaane all 6–8 minutit ja puista peale peterselli."]},
+ {n:"Kodujuustu-köögiviljavorm juustukoorikuga",s:"pea",t:["koogiviljad"],m:45,i:[["kodujuust",200],["munad",1],["paprika",.5],["riivjuust",40]],
+  h:["Kuumuta ahi 190 °C-ni.","Sega kodujuust, muna ja kuubikuteks lõigatud paprika ning maitsesta.","Tõsta vormi ja puista peale juust.","Küpseta 30–35 minutit, kuni pealt on kuldne."]}
+];
+R.forEach((r,i)=>{
+  r.img="img/d"+i+".jpg";
+  // makrod portsjoni kohta: kcal, valk, süsivesikud, rasv, kiudained
+  r.mac=[0,0,0,0,0];
+  r.i.forEach(([n,q])=>{const g=ING[n];if(!g)throw "Puudub koostisosa: "+n;const f=g[0]==="tk"?q:q/100;g[1].forEach((v,j)=>r.mac[j]+=v*f)});
+  // maitsesildid koostisosade järgi
+  const t=new Set(r.t);
+  r.i.forEach(([n])=>{
+    if(/veise/.test(n))t.add("veiseliha"); if(/kana/.test(n))t.add("kana"); if(/kalkun/.test(n))t.add("kalkun");
+    if(/lõhe|tursa/.test(n))t.add("kala"); if(/krevet/.test(n))t.add("mereannid");
+    if(/kinoa/.test(n))t.add("kinoa"); if(/riis/.test(n))t.add("riis"); if(/kaerahelb/.test(n))t.add("kaer");
+    if(/pasta|spagetid|fettuccine/.test(n))t.add("pasta"); if(/^munad$/.test(n))t.add("munad");
+    if(/jogurt|piim$|juust|parmesan|feta/.test(n))t.add("piim");
+  });
+  r.t=[...t];
+});
+
+const TASTE_GROUPS=[
+  ["Liha ja kala",[["kana","Kana"],["kalkun","Kalkun"],["veiseliha","Veiseliha"],["kala","Kala"],["mereannid","Mereannid"]]],
+  ["Taimne, munad ja piim",[["taimne","Taimne toit"],["kaunviljad","Kaunviljad"],["koogiviljad","Köögiviljad"],["munad","Munad"],["piim","Piimatooted"]]],
+  ["Lisandid",[["kinoa","Kinoa"],["riis","Riis"],["kaer","Kaerahelbed"],["pasta","Pasta"]]],
+  ["Maitsesuunad",[["aasia","Aasia"],["vahemere","Vahemere"],["mehhiko","Mehhiko"],["vurts","Vürtsikas"]]]];
+const SLOTS=[["hommik","Hommikusöök"],["louna","Lõunasöök"],["ohtu","Õhtusöök"]];
+const DAYS=["Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev","Pühapäev"];
+const STEPS=["Pood","Inimesed","Hinnaklass","Maitsed","Menüü","Ostunimekiri"];
+
+// ---------- Olek ----------
+const KEY="toiduplaan-v3";
+const def={store:"",tier:"",tastes:{},people:2,slots:{hommik:true,louna:true,ohtu:true}};
+let S=load(), step=0, plan=[], got=new Set();
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v)return Object.assign(JSON.parse(JSON.stringify(def)),v)}catch(e){}return JSON.parse(JSON.stringify(def))}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+const store=()=>STORES.find(s=>s.id===S.store)||STORES[3];
+const tierOf=id=>TIERS.find(t=>t.id===id)||TIERS[1];
+const tier=()=>tierOf(S.tier);
+const eur=v=>v.toFixed(2).replace(".",",")+" €";
+const num=(v,d=0)=>v.toFixed(d).replace(".",",");
+const anySlot=()=>SLOTS.some(([k])=>S.slots[k]);
+const slotCount=()=>SLOTS.filter(([k])=>S.slots[k]).length;
+const ready=i=>i===0||(i===1&&!!S.store)||(i===2&&!!S.store&&anySlot())||(i>=3&&!!S.store&&anySlot()&&!!S.tier);
+
+// ---------- Hinnad ----------
+// ühe ühiku hind (g, ml või tk) valitud poes ja hinnaklassis
+function unitPrice(name,t=tier()){const g=ING[name];return g[5][t.ti]*store().idx/g[4]}
+function costOf(r,t=tier()){return r.i.reduce((a,[n,q])=>a+q*unitPrice(n,t),0)}
+const price=r=>costOf(r);
+
+function tierEst(t){
+  const avg=kind=>{const l=R.filter(r=>r.s===kind&&costOf(r,t)<=t.max);const L=l.length?l:R.filter(r=>r.s===kind);return L.reduce((a,r)=>a+costOf(r,t),0)/L.length};
+  const b=avg("hommik"), m=avg("pea");
+  const perPerson=(S.slots.hommik?b:0)+(S.slots.louna?m:0)+(S.slots.ohtu?m:0);
+  return {portion:perPerson/Math.max(1,slotCount()), day:perPerson*S.people};
+}
+
+// ---------- Plaani koostamine ----------
+function candidates(kind){
+  const no=Object.keys(S.tastes).filter(k=>S.tastes[k]==="no");
+  const likes=Object.keys(S.tastes).filter(k=>S.tastes[k]==="like");
+  let list=R.filter(r=>r.s===kind&&!r.t.some(t=>no.includes(t)));
+  const inBudget=list.filter(r=>price(r)<=tier().max); if(inBudget.length>=3) list=inBudget;
+  return list.map(r=>{
+    let w=1+2.5*r.t.filter(t=>likes.includes(t)).length;
+    if(S.tier==="premium") w*=1+price(r)/4;
+    if(S.tier==="soodne") w*=Math.max(.3,1.7-price(r)/3);
+    return {r,w};
+  });
+}
+function pick(kind,avoid){
+  const c=candidates(kind); if(!c.length) return null;
+  let pool=c.filter(x=>!avoid.has(x.r.n)); if(!pool.length) pool=c;
+  let x=Math.random()*pool.reduce((a,p)=>a+p.w,0);
+  for(const p of pool){x-=p.w;if(x<=0)return p.r} return pool[pool.length-1].r;
+}
+function generate(){
+  const used=new Set(); plan=DAYS.map(()=>({}));
+  plan.forEach(d=>SLOTS.forEach(([k])=>{
+    if(!S.slots[k]) return;
+    const r=pick(k==="hommik"?"hommik":"pea",used);
+    if(r){d[k]=r;used.add(r.n);if(used.size>20)used.clear()}
+  }));
+  got=new Set();
+}
+function swap(di,k){
+  const avoid=new Set(); plan.forEach(d=>Object.values(d).forEach(r=>avoid.add(r.n)));
+  const r=pick(k==="hommik"?"hommik":"pea",avoid); if(r) plan[di][k]=r;
+}
+
+// ---------- Kogused ----------
+const FR={.25:"¼",.5:"½",.75:"¾",.3:"⅓"};
+function amt(q,u){
+  if(u==="tk"){const w=Math.floor(q),f=+(q-w).toFixed(2);return (w?w:"")+(FR[f]||(f?num(f,1).slice(1):""))+(w||f?"":"0")+" tk"}
+  if(q>=1000) return num(q/1000,q%1000?1:0)+(u==="g"?" kg":" l");
+  return (q<10?num(q,q%1?1:0):Math.round(q))+" "+u;
+}
+const packSize=g=>g[0]==="tk"?g[4]+" tk":amt(g[4],g[0]);
+
+// Ostunimekiri: kogused nii, nagu poes müüakse
+function shopping(){
+  const need=new Map();
+  plan.forEach(d=>Object.values(d).forEach(r=>r.i.forEach(([n,q])=>need.set(n,(need.get(n)||0)+q*S.people))));
+  const t=tier(), idx=store().idx;
+  return [...need].map(([n,q])=>{
+    const g=ING[n], [u,,cat,kind,size,ps,label,est]=g, p=ps[t.ti]*idx;
+    let buy,cost,count;
+    if(kind==="p"){count=Math.max(1,Math.ceil(q/size-0.03));buy=`${count} × ${packSize(g)}`;cost=count*p}
+    else if(kind==="pc"){count=Math.max(1,Math.ceil(q-0.05));buy=`${count} tk`;cost=count*p}
+    else {const kg=Math.max(.1,Math.ceil(q/100)/10);buy=`~${num(kg,1)} kg`;cost=kg*p}
+    return {n,label,cat,buy,cost,need:amt(q,u),est};
+  });
+}
+
+// ---------- Lehed ----------
+const head=(i,t,l)=>`<p class="eyebrow">Samm ${i+1} / ${STEPS.length}</p><h1>${t}</h1>${l?`<p class="lead">${l}</p>`:""}`;
+const nav=(nextLabel,nextOk=true)=>`<div class="nav">
+  ${step>0?`<button class="btn ghost" data-go="${step-1}">← Tagasi</button>`:"<span></span>"}
+  ${nextLabel?`<button class="btn" data-go="${step+1}" ${nextOk?"":"disabled"}>${nextLabel}</button>`:""}</div>`;
+
+const PAGES=[
+  ()=>`${head(0,"Kust sa poodled?",`Vali pood. Hinnad põhinevad Rimi e-poe hindadel (${PRICE_DATE}); teiste poodide hinnad on arvutatud poe hinnataseme järgi.`)}
+    <div class="cards">${STORES.map(s=>`<button class="card" aria-pressed="${s.id===S.store}" data-store="${s.id}"><b>${s.name}</b><small>${s.id==="rimi"?"päris e-poe hinnad":"hinnatase "+Math.round(s.idx*100)+" (Rimi = 100)"}</small></button>`).join("")}</div>
+    ${nav("Edasi →",!!S.store)}`,
+  ()=>`${head(1,"Kellele ja millal?","Selle järgi arvutan hinnad ja ostunimekirja kogused.")}
+    <div class="box"><p class="label">Mitu inimest sööb?</p>
+      <div class="stepper"><button data-people="-1" aria-label="Vähem inimesi">−</button><output>${S.people}</output><button data-people="1" aria-label="Rohkem inimesi">+</button></div></div>
+    <div class="box"><p class="label">Millised söögikorrad plaani?</p>
+      <div class="checks">${SLOTS.map(([k,l])=>`<label><input type="checkbox" id="slot-${k}" data-slot="${k}" ${S.slots[k]?"checked":""}> ${l}</label>`).join("")}</div></div>
+    ${nav("Edasi →",anySlot())}`,
+  ()=>`${head(2,"Mis hinnaklassis?",`Hinnad on arvutatud ${store().name} hindade järgi ${forN(S.people)}, ${slotCount()} ${slotCount()===1?"söögikord":"söögikorda"} päevas.`)}
+    <div class="cards">${TIERS.map(t=>{const e=tierEst(t);return `<button class="card" aria-pressed="${t.id===S.tier}" data-tier="${t.id}"><b>${t.name}</b>
+      <span class="prices"><span><span class="price">~${eur(e.portion)}</span><span class="price-sub">üks portsjon</span></span>
+      <span><span class="price">~${eur(e.day)}</span><span class="price-sub">päev ${forN(S.people)}</span></span></span>
+      <p>${t.desc}</p>
+      <span class="tier-week"><span>Terve nädal ${forN(S.people)}</span><b>~${eur(e.day*7)}</b></span></button>`}).join("")}</div>
+    ${nav("Edasi →",!!S.tier)}`,
+  ()=>`${head(3,"Mis sulle maitseb?","Kõik toidud on tervislikud: palju köögivilju, täisteratooteid ja valku. Vali, mida eelistad.")}
+    <div class="legend"><span><b>1 klõps</b> = meeldib, pakun sagedamini</span><span><i>2 klõpsu</i> = ei söö, jätan välja</span></div>
+    ${TASTE_GROUPS.map(([g,list])=>`<div class="tgroup"><h2>${g}</h2><div class="chips">${list.map(([id,l])=>{const s=S.tastes[id]||"";return `<button class="chip" data-taste="${id}" data-s="${s}">${s==="like"?"♥ ":s==="no"?"✕ ":""}${l}</button>`}).join("")}</div></div>`).join("")}
+    ${nav("Koosta menüü →")}`,
+  ()=>{
+    const meals=plan.flatMap(d=>Object.values(d));
+    const total=meals.reduce((a,r)=>a+price(r),0)*S.people;
+    const kcal=Math.round(meals.reduce((a,r)=>a+r.mac[0],0)/7);
+    const prot=Math.round(meals.reduce((a,r)=>a+r.mac[1],0)/7);
+    const slotName=Object.fromEntries(SLOTS);
+    return `${head(4,"Sinu nädala menüü","Vajuta toidul, et näha retsepti ja makrosid. ↻ vahetab toidu.")}
+    <div class="summary">
+      <div><span class="k">Toidu hind nädalas</span><span class="big">${eur(total)}</span></div>
+      <div><span class="k">Päevas</span><span class="v">${eur(total/7)}</span></div>
+      <div><span class="k">Inimese kohta päevas</span><span class="v">~${kcal} kcal · ${prot} g valku</span></div>
+      <div><span class="k">Pood · klass</span><span class="v">${store().name} · ${tier().name}</span></div>
+    </div>
+    <div class="toolbar"><span class="eyebrow">${S.people} in · ${meals.length} toidukorda</span><button class="btn ghost" data-regen>↻ Koosta uus menüü</button></div>
+    <div class="week">${plan.map((d,di)=>{
+      const dc=Object.values(d).reduce((a,r)=>a+price(r),0)*S.people;
+      return `<article class="day"><div class="day-h"><h3>${DAYS[di]}</h3><span>${eur(dc)}</span></div>
+      ${SLOTS.filter(([k])=>d[k]).map(([k])=>{const r=d[k];return `<div class="meal"><span class="slot">${slotName[k]}</span>
+        <div class="pic" data-open="${di}|${k}"><img src="${r.img}" alt="${r.n}" width="96" height="96" loading="lazy"></div>
+        <div class="txt" data-open="${di}|${k}" role="button" tabindex="0" aria-label="Ava retsept: ${r.n}"><span class="name">${r.n}</span><span class="meta">${r.m} min · ${Math.round(r.mac[0])} kcal · ${Math.round(r.mac[1])} g valku</span></div>
+        <button class="swap" data-d="${di}" data-k="${k}" title="Vaheta toit" aria-label="Vaheta ${r.n}">↻</button></div>`}).join("")}</article>`}).join("")}</div>
+    <p class="credit">Fotod: Unsplash. Makrod on arvutatud koostisosade keskmiste toiteväärtuste järgi.</p>
+    ${nav("Ostunimekiri →")}`},
+  ()=>{
+    const items=shopping();
+    const used=plan.flatMap(d=>Object.values(d)).reduce((a,r)=>a+price(r),0)*S.people;
+    const pay=items.reduce((a,x)=>a+x.cost,0);
+    const groups=Object.keys(CAT).map(c=>[c,items.filter(x=>x.cat===c).sort((a,b)=>a.label.localeCompare(b.label,"et"))]).filter(g=>g[1].length);
+    const anyEst=items.some(x=>x.est);
+    return `${head(5,"Ostunimekiri","Kogused on ümardatud poe pakenditeni. Märgi ostetud tooted maha või kopeeri nimekiri telefoni.")}
+    <div class="toolbar"><span></span><button class="btn ghost" id="copy">Kopeeri nimekiri</button></div>
+    <div class="receipt"><div class="rh"><b>${store().name.toUpperCase()}</b><br>${S.people} in · 7 päeva · ${tier().name.toLowerCase()}</div>
+      ${groups.map(([c,l])=>`<div class="cat">${CAT[c]}</div>${l.map(x=>`<label class="ln ${got.has(x.n)?"got":""}"><input type="checkbox" data-key="${x.n}" ${got.has(x.n)?"checked":""}><span>${x.label}${x.est?"*":""}</span><span class="qty">${x.buy}</span><small>vaja ${x.need} · ${eur(x.cost)}</small></label>`).join("")}`).join("")}
+      <div class="tot"><span>POES MAKSAD ~</span><span>${eur(pay)}</span></div>
+      <div class="note">Sellest läheb selle nädala toitudesse ~${eur(used)}. Ülejäänu (nt õli, maitseained, pooleli pakid) jääb kappi.<br>Hinnad: Rimi e-pood ${PRICE_DATE}${store().id!=="rimi"?`, ${store().name} hinnatase on hinnanguline`:""}.${anyEst?"<br>* toodet polnud e-poes, hind on hinnanguline.":""}</div></div>
+    <div class="nav"><button class="btn ghost" data-go="4">← Menüü</button><button class="btn ghost" data-go="0">Alusta otsast</button></div>`}
+];
+
+// ---------- Retseptiaken ----------
+function openRecipe(r){
+  const t=tier(), m=r.mac, n=S.people;
+  const goal=[700,40,90,25,10]; // võrdlus: hea ühe toidukorra suurus
+  const mac=(v,l,u,i,c)=>`<div class="mac"><b>${Math.round(v)}${u}</b><span>${l}</span><i style="--w:${Math.min(100,Math.round(v/goal[i]*100))}%;${c?`--c:${c}`:""}"></i></div>`;
+  const el=document.getElementById("modal");
+  el.innerHTML=`<div class="modal" data-close><div class="sheet" role="dialog" aria-modal="true" aria-label="${r.n}">
+    <div class="hero"><img src="${r.img}" alt="${r.n}"><button class="x" data-close aria-label="Sulge">✕</button></div>
+    <div class="body">
+      <div><h2>${r.n}</h2><div class="facts"><span>⏱ ${r.m} min</span><span>${eur(price(r))} portsjon</span><span>${eur(price(r)*n)} ${forN(n)}</span></div></div>
+      <div><p class="label">Makrod ühe portsjoni kohta</p><div class="macros">
+        ${mac(m[0],"kcal","",0)}${mac(m[1],"valk","g",1)}${mac(m[2],"süsivesikud","g",2,"var(--mustard)")}${mac(m[3],"rasv","g",3,"var(--no)")}${mac(m[4],"kiudained","g",4)}
+      </div></div>
+      <div><p class="label">Koostisosad ${forN(n)}</p><ul class="ing">${r.i.map(([x,q])=>`<li><span>${x[0].toUpperCase()+x.slice(1)}</span><span>${amt(q*n,ING[x][0])}</span></li>`).join("")}</ul>
+        <p class="note" style="margin-top:8px">Lisaks sool ja pipar maitse järgi.</p></div>
+      <div><p class="label">Valmistamine</p><ol class="how">${r.h.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+    </div></div></div>`;
+  el.hidden=false; document.body.style.overflow="hidden";
+  el.querySelector(".x").focus();
+}
+function closeRecipe(){const el=document.getElementById("modal");el.hidden=true;el.innerHTML="";document.body.style.overflow=""}
+
+function render(){
+  document.getElementById("wrap").classList.toggle("wide",step>=4);
+  document.getElementById("steps").innerHTML=STEPS.map((s,i)=>`<li><button class="${i===step?"cur":i<step?"done":""}" data-go="${i}" ${ready(i)?"":"disabled"} ${i===step?'aria-current="step"':""}>${s}</button></li>`).join("");
+  document.getElementById("view").innerHTML=`<section class="page">${PAGES[step]()}</section>`;
+}
+function go(i){
+  if(i<0||i>=STEPS.length||!ready(i)) return;
+  if(i>=4&&(step<4||!plan.length)) generate();
+  step=i; render(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// ---------- Sündmused ----------
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-close]")&&(e.target.matches("[data-close]")||e.target.closest(".x"))){closeRecipe();return}
+  const o=e.target.closest("[data-open]");
+  if(o){const [di,k]=o.dataset.open.split("|");openRecipe(plan[+di][k]);return}
+  const b=e.target.closest("button"); if(!b||b.disabled) return;
+  if(b.dataset.go!==undefined){go(+b.dataset.go);return}
+  if(b.dataset.store){S.store=b.dataset.store;save();render();return}
+  if(b.dataset.tier){S.tier=b.dataset.tier;save();render();return}
+  if(b.dataset.taste){const id=b.dataset.taste,c=S.tastes[id];if(!c)S.tastes[id]="like";else if(c==="like")S.tastes[id]="no";else delete S.tastes[id];save();render();return}
+  if(b.dataset.people){S.people=Math.min(10,Math.max(1,S.people+ +b.dataset.people));save();render();return}
+  if(b.hasAttribute("data-regen")){generate();render();return}
+  if(b.classList.contains("swap")){swap(+b.dataset.d,b.dataset.k);render();return}
+  if(b.id==="copy"){
+    const txt=shopping().map(x=>`☐ ${x.label} – ${x.buy}`).join("\n");
+    const fail=()=>{b.textContent="Kopeerimine ei õnnestunud"};
+    try{navigator.clipboard.writeText(txt).then(()=>{b.textContent="Kopeeritud ✓";setTimeout(()=>b.textContent="Kopeeri nimekiri",1500)},fail)}catch(err){fail()}
+  }
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!document.getElementById("modal").hidden) closeRecipe();
+  if((e.key==="Enter"||e.key===" ")&&e.target.matches?.("[data-open]")){e.preventDefault();e.target.click()}
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.slot){S.slots[t.dataset.slot]=t.checked;save();render()}
+  if(t.dataset.key){t.checked?got.add(t.dataset.key):got.delete(t.dataset.key);t.closest(".ln").classList.toggle("got",t.checked)}
+});
+
+render();
+</script>
