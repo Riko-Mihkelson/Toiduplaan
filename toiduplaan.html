@@ -149,6 +149,13 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--mustard);outlin
 .ing{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .ing li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line)}
 .ing li span:last-child{font-family:var(--f-mono);font-size:13.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hint{font-size:13.5px;color:var(--muted);margin:0}
+.person{display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px dashed var(--line)}
+.person-h{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.person-h input[type=text]{flex:1 1 160px;min-width:0;font:inherit;font-weight:600;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.kcal-in{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}
+.kcal-in input{width:96px;font:inherit;font-family:var(--f-display);font-weight:700;font-size:18px;padding:7px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-variant-numeric:tabular-nums}
+.chips.small .chip{font-size:13.5px;padding:6px 11px}
 .how{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px}
 .how li{padding-left:4px;line-height:1.5}
 .how li::marker{font-family:var(--f-display);font-weight:700;color:var(--forest)}
@@ -261,7 +268,25 @@ const ING={
  "falafel":["g",[330,13,32,18,6],"M","p",200,[3.59,3.59,3.59],"Falafel"],
  "hummus":["g",[250,7,14,18,6],"M","p",175,[1.46,2.75,2.75],"Hummus"],
  "tomat":["tk",[22,1.1,4.7,.2,1.4],"K","pc",1,[.21,.21,.48],"Tomat"],
- "kodujuust":["g",[100,13,3,5,0],"P","p",500,[2.49,2.49,3.32],"Kodujuust"]
+ "kodujuust":["g",[100,13,3,5,0],"P","p",500,[2.49,2.49,3.32],"Kodujuust"],
+ // lisatud 15.11.2026
+ "murulauk":["g",[30,3.3,4.4,.7,2.5],"K","p",20,[2.39,2.39,2.39],"Murulauk potis"],
+ "toorjuust":["g",[250,6,4,23,0],"P","p",150,[1.35,1.35,2.17],"Toorjuust"],
+ "suitsulõhe":["g",[180,22,0,10,0],"L","p",100,[4.69,4.69,4.69],"Külmsuitsu lõhe"],
+ "teriyaki kaste":["ml",[90,4,16,0,0],"M","p",320,[5.19,5.19,6.92],"Teriyaki kaste"],
+ "rohelised oad":["g",[31,1.8,7,.2,3.4],"K","p",400,[1.99,1.99,1.99],"Rohelised oad, külmutatud",1],
+ "punased läätsed":["g",[340,24,50,1.5,11],"T","p",400,[1.35,1.35,2.29],"Punased läätsed"],
+ "kõrvits":["g",[26,1,6.5,.1,.5],"K","kg",1000,[1.19,1.19,1.79],"Kõrvits"],
+ "kõrvitsaseemned":["g",[560,30,10,46,6],"T","p",150,[2.45,2.45,2.45],"Kõrvitsaseemned"],
+ "pesto":["g",[450,5,6,45,2],"M","p",185,[1.69,1.69,3.20],"Basiilikupesto"],
+ "munanuudlid":["g",[380,14,70,4,3],"T","p",250,[1.49,1.49,1.49],"Munanuudlid"],
+ "õun":["tk",[78,.4,21,.3,3.6],"K","pc",1,[.11,.48,.59],"Õun"],
+ "lavašš":["tk",[180,6,36,1.5,4],"T","p",2,[1.19,1.19,1.19],"Täistera lavašš"],
+ "kalkunifilee":["g",[105,24,0,1,0],"L","p",360,[5.99,5.99,5.99],"Kalkuni rinnafilee"],
+ "kanakoivad":["g",[150,15,0,10,0],"L","p",500,[2.49,2.49,3.99],"Broileri poolkoivad"],
+ "burgerikukkel":["tk",[220,8,40,3.5,2],"T","p",4,[2.49,2.49,3.99],"Burgerikuklid seesamiga"],
+ "rooma salat":["g",[17,1.2,3.3,.3,2.1],"K","p",200,[1.99,1.99,1.99],"Rooma salat"],
+ "penne":["g",[350,13,65,2.5,8],"T","p",500,[1.25,1.25,1.59],"Täistera penne"]
 };
 const CAT={L:"Liha ja kala",P:"Piim ja munad",K:"Puu- ja köögiviljad",T:"Teraviljad ja kaunviljad",M:"Muu"};
 
@@ -333,7 +358,50 @@ const R=[
  {n:"Shakshuka",s:"pea",t:["vahemere","koogiviljad","vurts"],m:25,i:[["munad",2],["purustatud tomatid",200],["paprika",.5],["punane sibul",.25],["küüslauk",5],["petersell",5],["oliiviõli",5]],
   h:["Prae sibul, küüslauk ja paprika õlis 5 minutit.","Lisa tomatid, maitsesta ja hauta 10 minutit.","Tee kastmesse lohud ja löö munad sisse.","Küpseta kaane all 6–8 minutit ja puista peale peterselli."]},
  {n:"Kodujuustu-köögiviljavorm juustukoorikuga",s:"pea",t:["koogiviljad"],m:45,i:[["kodujuust",200],["munad",1],["paprika",.5],["riivjuust",40]],
-  h:["Kuumuta ahi 190 °C-ni.","Sega kodujuust, muna ja kuubikuteks lõigatud paprika ning maitsesta.","Tõsta vormi ja puista peale juust.","Küpseta 30–35 minutit, kuni pealt on kuldne."]}
+  h:["Kuumuta ahi 190 °C-ni.","Sega kodujuust, muna ja kuubikuteks lõigatud paprika ning maitsesta.","Tõsta vormi ja puista peale juust.","Küpseta 30–35 minutit, kuni pealt on kuldne."]},
+ // --- lisatud 15.11.2026 (fotod img/d33…d53) ---
+ {n:"Munapuder murulaugu ja täisteraleivaga",s:"hommik",t:["munad"],m:10,i:[["munad",3],["murulauk",3],["täisteraleib",40],["oliiviõli",5]],
+  h:["Klopi munad näpuotsatäie soolaga lahti.","Kuumuta õli pannil tasasel tulel ja vala munad pannile.","Sega aeglaselt, kuni munad on pehmelt hangunud.","Puista peale hakitud murulauku ja serveeri leivaga."]},
+ {n:"Munamuffinid paprika ja spinatiga",s:"hommik",t:["munad","koogiviljad"],m:25,i:[["munad",2],["paprika",.3],["spinat",30],["riivjuust",15]],
+  h:["Kuumuta ahi 180 °C-ni ja määri muffinivorm õliga.","Haki paprika ja spinat ning jaga vormidesse.","Klopi munad soola ja pipraga ning vala peale. Puista üle juustuga.","Küpseta 18–20 minutit. Üks portsjon on 3 muffinit."]},
+ {n:"Suitsulõhe-toorjuustu röstsai",s:"hommik",t:["piim"],m:5,i:[["täisteraleib",80],["toorjuust",40],["suitsulõhe",60],["mesi",5]],
+  h:["Rösti leivaviilud.","Määri peale toorjuust.","Laota peale suitsulõhe viilud.","Nirista üle natukese meega ja lisa pipart."]},
+ {n:"Hommikusöögi burrito munaga",s:"hommik",t:["munad","mehhiko"],m:15,i:[["lavašš",1],["munad",2],["riivjuust",20],["paprika",.25],["tomat",.5],["riis",40]],
+  h:["Keeda riis.","Prae hakitud paprika ja tee munadest munapuder.","Laota lavašile munapuder ja juust, keera rulli ja pruunista kuival pannil.","Lõika pooleks ja serveeri riisi ning hakitud tomatist salsaga."]},
+ {n:"Roheline smuuti õuna, kiivi ja spinatiga",s:"hommik",t:["taimne","koogiviljad"],m:5,i:[["õun",1],["kiivi",1],["spinat",40],["kurk",.25],["petersell",5]],
+  h:["Lõika õun, kooritud kiivi ja kurk tükkideks.","Pane kõik koos spinati, peterselli ja 150 ml külma veega blenderisse.","Blenderda ühtlaseks ja serveeri kohe."]},
+ {n:"Kana-caesari salat",s:"pea",t:["koogiviljad"],m:20,i:[["kanafilee",140],["rooma salat",120],["täisteraleib",30],["parmesan",15],["kreeka jogurt",40],["sidrun",.25],["küüslauk",3]],
+  h:["Maitsesta kanafilee, prae küpseks ja lõika tükkideks.","Lõika leib kuubikuteks ja rösti pannil krõbedaks krutoonideks.","Sega kastmeks jogurt, riivitud küüslauk, sidrunimahl ja pool parmesanist.","Rebi salat taldrikule, lisa kana ja krutoonid, puista peale ülejäänud parmesan ja serveeri kastmega."]},
+ {n:"Kana-fajitad",s:"pea",t:["mehhiko","koogiviljad"],m:25,i:[["kanafilee",140],["paprika",1],["punane sibul",.5],["tortillad",2],["laim",.5],["oliiviõli",10]],
+  h:["Lõika kana, paprika ja sibul ribadeks.","Prae kana õlis kõrgel kuumusel küpseks, maitsesta soola, pipra ja paprikapulbriga.","Lisa köögiviljad ja prae veel 4 minutit.","Soojenda tortillad ja serveeri koos laimiga."]},
+ {n:"Teriyaki-kana riisiga",s:"pea",t:["aasia"],m:25,i:[["kanafilee",150],["teriyaki kaste",40],["riis",80],["seesamiseemned",3]],
+  h:["Keeda riis.","Lõika kana tükkideks ja prae pannil kuldseks.","Lisa teriyaki kaste ja lase 2–3 minutit pakseneda, kuni kana on läikiv.","Serveeri riisiga ja puista peale seesamiseemned."]},
+ {n:"Lõhe roheliste ubadega",s:"pea",t:["koogiviljad"],m:25,i:[["lõhefilee",150],["rohelised oad",150],["petersell",10],["küüslauk",3],["sidrun",.25],["oliiviõli",10]],
+  h:["Kuumuta ahi 200 °C-ni.","Haki petersell ja küüslauk, sega poole õli ja sidrunimahlaga.","Laota lõhe ahjuplaadile, kata ürdiseguga ja küpseta 12–15 minutit.","Keeda rohelisi ube 4 minutit, sega ülejäänud õliga ja serveeri koos lõhega."]},
+ {n:"Punase läätse supp",s:"pea",t:["taimne","kaunviljad","vurts"],m:30,i:[["punased läätsed",70],["porgand",1],["punane sibul",.25],["küüslauk",5],["purustatud tomatid",100],["koriander",3],["oliiviõli",5]],
+  h:["Prae hakitud sibul, küüslauk ja porgand õlis 5 minutit.","Lisa loputatud läätsed, tomatid ja 400 ml vett portsjoni kohta.","Keeda 20 minutit, kuni läätsed on pehmed.","Püreesta ühtlaseks, maitsesta ja puista peale koriandrit."]},
+ {n:"Kõrvitsasupp feta ja kõrvitsaseemnetega",s:"pea",t:["koogiviljad","piim"],m:35,i:[["kõrvits",350],["punane sibul",.25],["küüslauk",3],["fetajuust",25],["kõrvitsaseemned",10],["tšillihelbed",.5],["oliiviõli",5]],
+  h:["Koori kõrvits ja lõika kuubikuteks.","Prae sibul ja küüslauk õlis, lisa kõrvits ja 300 ml vett portsjoni kohta.","Keeda 20 minutit ja püreesta ühtlaseks.","Serveeri fetakuubikute, kõrvitsaseemnete ja tšillihelvestega."]},
+ {n:"Kana-wrap ahjukartuli ja jogurtikastmega",s:"pea",t:["vahemere"],m:35,i:[["kanafilee",130],["lavašš",1],["kartul",150],["kreeka jogurt",40],["küüslauk",3],["oliiviõli",5]],
+  h:["Kuumuta ahi 220 °C-ni. Lõika kartul pulkadeks, sega õliga ja küpseta 25 minutit.","Prae maitsestatud kana küpseks ja lõika ribadeks.","Sega jogurt riivitud küüslaugu ja soolaga.","Täida lavašš kana, kartulipulkade ja kastmega ning keera rulli."]},
+ {n:"Ahjukana koivad kartulitega",s:"pea",t:[],m:50,i:[["kanakoivad",300],["kartul",250],["küüslauk",5],["oliiviõli",10]],
+  h:["Kuumuta ahi 200 °C-ni.","Lõika kartulid tükkideks ja sega poole õliga.","Hõõru koivad sisse ülejäänud õli, küüslaugu, soola ja paprikapulbriga.","Laota kõik ahjuplaadile ja küpseta 40–45 minutit, kuni nahk on krõbe."]},
+ {n:"Pesto-pasta kirsstomatiga",s:"pea",t:["vahemere"],m:15,i:[["penne",90],["pesto",30],["kirsstomatid",40]],
+  h:["Keeda pasta pakendi juhise järgi.","Nõruta pasta, jäta alles pool klaasi keeduvett.","Sega pasta pesto ja natukese keeduveega.","Serveeri poolitatud kirsstomatitega."]},
+ {n:"Täidetud bataat maisi, ubade ja juustuga",s:"pea",t:["kaunviljad","mehhiko","koogiviljad"],m:50,i:[["bataat",300],["mustad oad",60],["mais",40],["riivjuust",25],["koriander",3]],
+  h:["Kuumuta ahi 200 °C-ni ja küpseta bataati 40 minutit, kuni see on pehme.","Lõika bataat pooleks ja kraabi sisu kergelt kahvliga lahti.","Sega sisse oad ja mais, puista peale juust.","Küpseta veel 8 minutit ja kaunista koriandriga."]},
+ {n:"Krevetinuudlid köögiviljadega",s:"pea",t:["aasia","koogiviljad"],m:20,i:[["krevetid",120],["munanuudlid",80],["paprika",.5],["idud",40],["roheline sibul",10],["sojakaste",15],["oliiviõli",5]],
+  h:["Keeda nuudlid pakendi juhise järgi.","Prae krevetid õlis 2–3 minutit ja tõsta kõrvale.","Prae paprikaribasid ja idusid 2 minutit.","Lisa nuudlid, krevetid ja sojakaste, sega läbi ja puista peale rohelist sibulat."]},
+ {n:"Kalkuni-wrap salatiga",s:"pea",t:[],m:20,i:[["kalkunifilee",120],["lavašš",1],["rooma salat",30],["porgand",.5],["kreeka jogurt",30]],
+  h:["Prae maitsestatud kalkunifilee küpseks ja lõika ribadeks.","Riivi porgand ja sega jogurtiga.","Laota lavašile salat, kalkun ja porgandi-jogurtisegu.","Keera tihedalt rulli ja lõika pooleks."]},
+ {n:"Veiselihaburger seemnekuklis",s:"pea",t:[],m:20,i:[["burgerikukkel",1],["veisehakkliha",130],["tomat",.5],["salatisegu",20]],
+  h:["Vormi hakklihast ühtlane kotlet ja maitsesta soola ja pipraga.","Prae kuumal pannil 3–4 minutit mõlemalt poolt.","Rösti kukli lõikepinnad pannil.","Pane kuklisse salat, kotlet ja tomativiilud."]},
+ {n:"Tofu kauss maisi ja munaga",s:"pea",t:["aasia","koogiviljad"],m:20,i:[["tofu",120],["mais",50],["kurk",.3],["punane kapsas",40],["kirsstomatid",60],["munad",1],["salatisegu",30],["sojakaste",10]],
+  h:["Keeda muna 8 minutit, jahuta ja poolita.","Lõika tofu kuubikuteks ja prae krõbedaks, nirista üle sojakastmega.","Lõika kurk, haki kapsas ja poolita tomatid.","Laota kaussi salat ja kõik komponendid eraldi hunnikutena."]},
+ {n:"Kalkuni-oa tšilli",s:"pea",t:["kaunviljad","mehhiko","vurts"],m:40,i:[["kalkunihakkliha",120],["punased oad",100],["mais",40],["purustatud tomatid",150],["punane sibul",.25],["tšillihelbed",1]],
+  h:["Prae hakitud sibul ja kalkunihakkliha pruuniks.","Lisa tšillihelbed ja tomatid.","Lisa oad ja mais ning hauta 20 minutit.","Maitsesta soola ja pipraga."]},
+ {n:"Kinoasalat tomati, kurgi ja ürtidega",s:"pea",t:["taimne","vahemere","koogiviljad"],m:20,i:[["kinoa",50],["kirsstomatid",80],["kurk",.5],["punane sibul",.25],["petersell",10],["sidrun",.5],["oliiviõli",10]],
+  h:["Keeda kinoa ja lase jahtuda.","Lõika tomatid, kurk ja sibul väikesteks tükkideks, haki petersell.","Sega kõik kokku õli, sidrunimahla, soola ja pipraga."]}
 ];
 R.forEach((r,i)=>{
   r.img="img/d"+i+".jpg";
@@ -346,7 +414,7 @@ R.forEach((r,i)=>{
     if(/veise/.test(n))t.add("veiseliha"); if(/kana/.test(n))t.add("kana"); if(/kalkun/.test(n))t.add("kalkun");
     if(/lõhe|tursa/.test(n))t.add("kala"); if(/krevet/.test(n))t.add("mereannid");
     if(/kinoa/.test(n))t.add("kinoa"); if(/riis/.test(n))t.add("riis"); if(/kaerahelb/.test(n))t.add("kaer");
-    if(/pasta|spagetid|fettuccine/.test(n))t.add("pasta"); if(/^munad$/.test(n))t.add("munad");
+    if(/pasta|spagetid|fettuccine|penne|nuudl/.test(n))t.add("pasta"); if(/^munad$/.test(n))t.add("munad");
     if(/jogurt|piim$|juust|parmesan|feta/.test(n))t.add("piim");
   });
   r.t=[...t];
@@ -363,8 +431,11 @@ const STEPS=["Pood","Inimesed","Hinnaklass","Maitsed","Menüü","Ostunimekiri"];
 
 // ---------- Olek ----------
 const KEY="toiduplaan-v3";
-const def={store:"",tier:"",tastes:{},people:2,slots:{hommik:true,louna:true,ohtu:true}};
+const def={store:"",tier:"",tastes:{},people:2,slots:{hommik:true,louna:true,ohtu:true},persons:[]};
 let S=load(), step=0, plan=[], got=new Set();
+// iga inimese nimi ja päevane kalorieesmärk (0 = tavaline portsjon)
+function syncPersons(){if(!Array.isArray(S.persons))S.persons=[];while(S.persons.length<S.people)S.persons.push({name:"",kcal:0});S.persons.length=S.people}
+syncPersons();
 function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v)return Object.assign(JSON.parse(JSON.stringify(def)),v)}catch(e){}return JSON.parse(JSON.stringify(def))}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
@@ -375,6 +446,18 @@ const eur=v=>v.toFixed(2).replace(".",",")+" €";
 const num=(v,d=0)=>v.toFixed(d).replace(".",",");
 const anySlot=()=>SLOTS.some(([k])=>S.slots[k]);
 const slotCount=()=>SLOTS.filter(([k])=>S.slots[k]).length;
+// ---------- Kalorieesmärk ----------
+// Päeva kalorid jagunevad söögikordade vahel nii; plaanist välja jäetud söögikorra osa jääb plaanist välja.
+const SHARE={hommik:.25,louna:.375,ohtu:.375};
+const KCAL_PRESETS=[[0,"Tavaline portsjon"],[1500,"1500"],[1800,"1800"],[2000,"2000"],[2500,"2500"],[3000,"3000"]];
+const pname=i=>(S.persons[i]?.name||"").trim()||`${i+1}. inimene`;
+const anyTarget=()=>S.persons.some(p=>p.kcal>0);
+// mitu portsjonit inimene p sellest toidust sööb
+function fac(r,k,p){const t=S.persons[p]?.kcal||0;if(!t)return 1;return Math.min(2.2,Math.max(.5,t*SHARE[k]/r.mac[0]))}
+// kõigi inimeste portsjonid kokku
+const pm=(r,k)=>S.persons.reduce((a,_,p)=>a+fac(r,k,p),0);
+const mealCost=(r,k)=>price(r)*pm(r,k);
+const meals=()=>plan.flatMap(d=>Object.entries(d));
 const ready=i=>i===0||(i===1&&!!S.store)||(i===2&&!!S.store&&anySlot())||(i>=3&&!!S.store&&anySlot()&&!!S.tier);
 
 // ---------- Hinnad ----------
@@ -384,10 +467,15 @@ function costOf(r,t=tier()){return r.i.reduce((a,[n,q])=>a+q*unitPrice(n,t),0)}
 const price=r=>costOf(r);
 
 function tierEst(t){
-  const avg=kind=>{const l=R.filter(r=>r.s===kind&&costOf(r,t)<=t.max);const L=l.length?l:R.filter(r=>r.s===kind);return L.reduce((a,r)=>a+costOf(r,t),0)/L.length};
-  const b=avg("hommik"), m=avg("pea");
-  const perPerson=(S.slots.hommik?b:0)+(S.slots.louna?m:0)+(S.slots.ohtu?m:0);
-  return {portion:perPerson/Math.max(1,slotCount()), day:perPerson*S.people};
+  const pool=kind=>{const l=R.filter(r=>r.s===kind&&costOf(r,t)<=t.max);return l.length?l:R.filter(r=>r.s===kind)};
+  const avg=(l,f)=>l.reduce((a,r)=>a+f(r),0)/l.length;
+  let day=0,portions=0;
+  SLOTS.forEach(([k])=>{
+    if(!S.slots[k])return;
+    const l=pool(k==="hommik"?"hommik":"pea"), c=avg(l,r=>costOf(r,t)), kc=avg(l,r=>r.mac[0]);
+    S.persons.forEach(p=>{const f=p.kcal?Math.min(2.2,Math.max(.5,p.kcal*SHARE[k]/kc)):1;day+=c*f;portions++});
+  });
+  return {portion:day/Math.max(1,portions), day};
 }
 
 // ---------- Plaani koostamine ----------
@@ -435,7 +523,7 @@ const packSize=g=>g[0]==="tk"?g[4]+" tk":amt(g[4],g[0]);
 // Ostunimekiri: kogused nii, nagu poes müüakse
 function shopping(){
   const need=new Map();
-  plan.forEach(d=>Object.values(d).forEach(r=>r.i.forEach(([n,q])=>need.set(n,(need.get(n)||0)+q*S.people))));
+  meals().forEach(([k,r])=>{const m=pm(r,k);r.i.forEach(([n,q])=>need.set(n,(need.get(n)||0)+q*m))});
   const t=tier(), idx=store().idx;
   return [...need].map(([n,q])=>{
     const g=ING[n], [u,,cat,kind,size,ps,label,est]=g, p=ps[t.ti]*idx;
@@ -457,9 +545,17 @@ const PAGES=[
   ()=>`${head(0,"Kust sa poodled?",`Vali pood. Hinnad põhinevad Rimi e-poe hindadel (${PRICE_DATE}); teiste poodide hinnad on arvutatud poe hinnataseme järgi.`)}
     <div class="cards">${STORES.map(s=>`<button class="card" aria-pressed="${s.id===S.store}" data-store="${s.id}"><b>${s.name}</b><small>${s.id==="rimi"?"päris e-poe hinnad":"hinnatase "+Math.round(s.idx*100)+" (Rimi = 100)"}</small></button>`).join("")}</div>
     ${nav("Edasi →",!!S.store)}`,
-  ()=>`${head(1,"Kellele ja millal?","Selle järgi arvutan hinnad ja ostunimekirja kogused.")}
+  ()=>`${head(1,"Kellele ja millal?","Selle järgi arvutan portsjonid, hinnad ja ostunimekirja kogused.")}
     <div class="box"><p class="label">Mitu inimest sööb?</p>
       <div class="stepper"><button data-people="-1" aria-label="Vähem inimesi">−</button><output>${S.people}</output><button data-people="1" aria-label="Rohkem inimesi">+</button></div></div>
+    <div class="box"><p class="label">Mitu kalorit päevas?</p>
+      <p class="hint">Iga inimene saab valida oma päevase eesmärgi. Portsjonid tehakse selle järgi suuremaks või väiksemaks. „Tavaline portsjon” tähendab retsepti tavalist kogust.</p>
+      ${S.persons.map((p,i)=>`<div class="person">
+        <div class="person-h"><input type="text" id="name-${i}" data-name="${i}" value="${(p.name||"").replace(/"/g,"&quot;")}" placeholder="${i+1}. inimene" aria-label="${i+1}. inimese nimi" maxlength="20">
+          <label class="kcal-in"><input type="number" id="kcal-${i}" data-kcal="${i}" min="1000" max="5000" step="50" value="${p.kcal||""}" placeholder="—" aria-label="${pname(i)} kalorid päevas"><span>kcal päevas</span></label></div>
+        <div class="chips small">${KCAL_PRESETS.map(([v,l])=>`<button class="chip" data-kp="${i}|${v}" data-s="${(p.kcal||0)===v?"like":""}">${l}</button>`).join("")}</div>
+      </div>`).join("")}
+      <p class="hint">Jagunemine: hommikusöök 25%, lõunasöök 37,5% ja õhtusöök 37,5% päeva kaloritest.</p></div>
     <div class="box"><p class="label">Millised söögikorrad plaani?</p>
       <div class="checks">${SLOTS.map(([k,l])=>`<label><input type="checkbox" id="slot-${k}" data-slot="${k}" ${S.slots[k]?"checked":""}> ${l}</label>`).join("")}</div></div>
     ${nav("Edasi →",anySlot())}`,
@@ -475,31 +571,30 @@ const PAGES=[
     ${TASTE_GROUPS.map(([g,list])=>`<div class="tgroup"><h2>${g}</h2><div class="chips">${list.map(([id,l])=>{const s=S.tastes[id]||"";return `<button class="chip" data-taste="${id}" data-s="${s}">${s==="like"?"♥ ":s==="no"?"✕ ":""}${l}</button>`}).join("")}</div></div>`).join("")}
     ${nav("Koosta menüü →")}`,
   ()=>{
-    const meals=plan.flatMap(d=>Object.values(d));
-    const total=meals.reduce((a,r)=>a+price(r),0)*S.people;
-    const kcal=Math.round(meals.reduce((a,r)=>a+r.mac[0],0)/7);
-    const prot=Math.round(meals.reduce((a,r)=>a+r.mac[1],0)/7);
+    const M=meals();
+    const total=M.reduce((a,[k,r])=>a+mealCost(r,k),0);
+    const perP=S.persons.map((_,p)=>[0,1].map(j=>Math.round(M.reduce((a,[k,r])=>a+r.mac[j]*fac(r,k,p),0)/7)));
     const slotName=Object.fromEntries(SLOTS);
     return `${head(4,"Sinu nädala menüü","Vajuta toidul, et näha retsepti ja makrosid. ↻ vahetab toidu.")}
     <div class="summary">
       <div><span class="k">Toidu hind nädalas</span><span class="big">${eur(total)}</span></div>
       <div><span class="k">Päevas</span><span class="v">${eur(total/7)}</span></div>
-      <div><span class="k">Inimese kohta päevas</span><span class="v">~${kcal} kcal · ${prot} g valku</span></div>
+      <div><span class="k">Päevas keskmiselt</span><span class="v">${perP.map(([kc,pr],p)=>`${S.people>1?pname(p)+": ":""}~${kc} kcal · ${pr} g valku${S.persons[p].kcal?` (eesmärk ${S.persons[p].kcal})`:""}`).join("<br>")}</span></div>
       <div><span class="k">Pood · klass</span><span class="v">${store().name} · ${tier().name}</span></div>
     </div>
-    <div class="toolbar"><span class="eyebrow">${S.people} in · ${meals.length} toidukorda</span><button class="btn ghost" data-regen>↻ Koosta uus menüü</button></div>
+    <div class="toolbar"><span class="eyebrow">${S.people} in · ${M.length} toidukorda</span><button class="btn ghost" data-regen>↻ Koosta uus menüü</button></div>
     <div class="week">${plan.map((d,di)=>{
-      const dc=Object.values(d).reduce((a,r)=>a+price(r),0)*S.people;
+      const dc=Object.entries(d).reduce((a,[k,r])=>a+mealCost(r,k),0);
       return `<article class="day"><div class="day-h"><h3>${DAYS[di]}</h3><span>${eur(dc)}</span></div>
       ${SLOTS.filter(([k])=>d[k]).map(([k])=>{const r=d[k];return `<div class="meal"><span class="slot">${slotName[k]}</span>
         <div class="pic" data-open="${di}|${k}"><img src="${r.img}" alt="${r.n}" width="96" height="96" loading="lazy"></div>
-        <div class="txt" data-open="${di}|${k}" role="button" tabindex="0" aria-label="Ava retsept: ${r.n}"><span class="name">${r.n}</span><span class="meta">${r.m} min · ${Math.round(r.mac[0])} kcal · ${Math.round(r.mac[1])} g valku</span></div>
+        <div class="txt" data-open="${di}|${k}" role="button" tabindex="0" aria-label="Ava retsept: ${r.n}"><span class="name">${r.n}</span><span class="meta">${r.m} min · ${anyTarget()?S.persons.map((_,p)=>Math.round(r.mac[0]*fac(r,k,p))).join(" / ")+" kcal":Math.round(r.mac[0])+" kcal · "+Math.round(r.mac[1])+" g valku"}</span></div>
         <button class="swap" data-d="${di}" data-k="${k}" title="Vaheta toit" aria-label="Vaheta ${r.n}">↻</button></div>`}).join("")}</article>`}).join("")}</div>
     <p class="credit">Fotod: Unsplash. Makrod on arvutatud koostisosade keskmiste toiteväärtuste järgi.</p>
     ${nav("Ostunimekiri →")}`},
   ()=>{
     const items=shopping();
-    const used=plan.flatMap(d=>Object.values(d)).reduce((a,r)=>a+price(r),0)*S.people;
+    const used=meals().reduce((a,[k,r])=>a+mealCost(r,k),0);
     const pay=items.reduce((a,x)=>a+x.cost,0);
     const groups=Object.keys(CAT).map(c=>[c,items.filter(x=>x.cat===c).sort((a,b)=>a.label.localeCompare(b.label,"et"))]).filter(g=>g[1].length);
     const anyEst=items.some(x=>x.est);
@@ -513,19 +608,22 @@ const PAGES=[
 ];
 
 // ---------- Retseptiaken ----------
-function openRecipe(r){
-  const t=tier(), m=r.mac, n=S.people;
+function openRecipe(r,k){
+  const m=r.mac, n=S.people, tot=pm(r,k);
+  const fmtTk=q=>Math.round(q*2)/2;
+  const who=anyTarget()?`<div><p class="label">Kes kui palju sööb</p><ul class="ing">${S.persons.map((_,p)=>{const f=fac(r,k,p);return `<li><span>${pname(p)}</span><span>${num(f,1)} portsjonit · ${Math.round(m[0]*f)} kcal · ${Math.round(m[1]*f)} g valku</span></li>`}).join("")}</ul></div>`:"";
   const goal=[700,40,90,25,10]; // võrdlus: hea ühe toidukorra suurus
   const mac=(v,l,u,i,c)=>`<div class="mac"><b>${Math.round(v)}${u}</b><span>${l}</span><i style="--w:${Math.min(100,Math.round(v/goal[i]*100))}%;${c?`--c:${c}`:""}"></i></div>`;
   const el=document.getElementById("modal");
   el.innerHTML=`<div class="modal" data-close><div class="sheet" role="dialog" aria-modal="true" aria-label="${r.n}">
     <div class="hero"><img src="${r.img}" alt="${r.n}"><button class="x" data-close aria-label="Sulge">✕</button></div>
     <div class="body">
-      <div><h2>${r.n}</h2><div class="facts"><span>⏱ ${r.m} min</span><span>${eur(price(r))} portsjon</span><span>${eur(price(r)*n)} ${forN(n)}</span></div></div>
+      <div><h2>${r.n}</h2><div class="facts"><span>⏱ ${r.m} min</span><span>${eur(price(r))} portsjon</span><span>${eur(mealCost(r,k))} ${forN(n)}${anyTarget()?` (${num(tot,1)} portsjonit)`:""}</span></div></div>
       <div><p class="label">Makrod ühe portsjoni kohta</p><div class="macros">
         ${mac(m[0],"kcal","",0)}${mac(m[1],"valk","g",1)}${mac(m[2],"süsivesikud","g",2,"var(--mustard)")}${mac(m[3],"rasv","g",3,"var(--no)")}${mac(m[4],"kiudained","g",4)}
       </div></div>
-      <div><p class="label">Koostisosad ${forN(n)}</p><ul class="ing">${r.i.map(([x,q])=>`<li><span>${x[0].toUpperCase()+x.slice(1)}</span><span>${amt(q*n,ING[x][0])}</span></li>`).join("")}</ul>
+      ${who}
+      <div><p class="label">Koostisosad ${forN(n)}</p><ul class="ing">${r.i.map(([x,q])=>{const u=ING[x][0],v=q*tot;return `<li><span>${x[0].toUpperCase()+x.slice(1)}</span><span>${amt(u==="tk"&&v>=1?fmtTk(v):v,u)}</span></li>`}).join("")}</ul>
         <p class="note" style="margin-top:8px">Lisaks sool ja pipar maitse järgi.</p></div>
       <div><p class="label">Valmistamine</p><ol class="how">${r.h.map(s=>`<li>${s}</li>`).join("")}</ol></div>
     </div></div></div>`;
@@ -549,13 +647,14 @@ function go(i){
 document.addEventListener("click",e=>{
   if(e.target.closest("[data-close]")&&(e.target.matches("[data-close]")||e.target.closest(".x"))){closeRecipe();return}
   const o=e.target.closest("[data-open]");
-  if(o){const [di,k]=o.dataset.open.split("|");openRecipe(plan[+di][k]);return}
+  if(o){const [di,k]=o.dataset.open.split("|");openRecipe(plan[+di][k],k);return}
   const b=e.target.closest("button"); if(!b||b.disabled) return;
   if(b.dataset.go!==undefined){go(+b.dataset.go);return}
   if(b.dataset.store){S.store=b.dataset.store;save();render();return}
   if(b.dataset.tier){S.tier=b.dataset.tier;save();render();return}
   if(b.dataset.taste){const id=b.dataset.taste,c=S.tastes[id];if(!c)S.tastes[id]="like";else if(c==="like")S.tastes[id]="no";else delete S.tastes[id];save();render();return}
-  if(b.dataset.people){S.people=Math.min(10,Math.max(1,S.people+ +b.dataset.people));save();render();return}
+  if(b.dataset.people){S.people=Math.min(10,Math.max(1,S.people+ +b.dataset.people));syncPersons();save();render();return}
+  if(b.dataset.kp){const [i,v]=b.dataset.kp.split("|");S.persons[+i].kcal=+v;save();render();return}
   if(b.hasAttribute("data-regen")){generate();render();return}
   if(b.classList.contains("swap")){swap(+b.dataset.d,b.dataset.k);render();return}
   if(b.id==="copy"){
@@ -571,6 +670,8 @@ document.addEventListener("keydown",e=>{
 document.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset.slot){S.slots[t.dataset.slot]=t.checked;save();render()}
+  if(t.dataset.kcal!==undefined){const v=Math.round(+t.value||0);S.persons[+t.dataset.kcal].kcal=v?Math.min(5000,Math.max(1000,v)):0;save();render()}
+  if(t.dataset.name!==undefined){S.persons[+t.dataset.name].name=t.value.trim().slice(0,20);save();render()}
   if(t.dataset.key){t.checked?got.add(t.dataset.key):got.delete(t.dataset.key);t.closest(".ln").classList.toggle("got",t.checked)}
 });
 

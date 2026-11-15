@@ -5,7 +5,7 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 
 ## Failid
 - `toiduplaan.html` – kogu äpp: HTML, CSS ja JavaScript ühes failis, ilma raamistiketa.
-- `img/d0.jpg … img/d32.jpg` – toidufotod (Unsplash, tasuta litsents), 360×360.
+- `img/d0.jpg … img/d53.jpg` – toidufotod (Unsplash, tasuta litsents), 360×360.
   Fotode järjekord vastab massiivi `R` järjekorrale (`r.img = "img/d"+i+".jpg"`).
 
 ## Andmed skriptis
@@ -16,6 +16,9 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 - `R` – retseptid: nimi, söögikord (`hommik`/`pea`), maitsesildid, aeg, koostisosad portsjoni kohta, valmistamise sammud.
   Retsepti nimi ja koostisosad peavad vastama täpselt fotole.
 - Makrod ja maitsesildid (kana, kala jne) arvutatakse koostisosadest automaatselt.
+- `S.persons` – iga inimese nimi ja päevane kalorieesmärk (0 = tavaline portsjon). Portsjoni kordaja
+  `fac(r,k,p)` = eesmärk × `SHARE[söögikord]` / retsepti kcal, piiratud vahemikku 0,5–2,2.
+  Hinnad, ostunimekiri ja retseptiakna kogused arvestavad kõigi inimeste portsjonite summat `pm(r,k)`.
 
 ## Reeglid
 - Kõik kasutajale nähtav tekst on eesti keeles; kontrolli käänded (nt „kahele inimesele”).
