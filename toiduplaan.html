@@ -200,6 +200,31 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .ing li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line)}
 .ing li span:last-child{font-family:var(--f-mono);font-size:13.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .hint{font-size:13.5px;color:var(--muted);margin:0}
+/* ostunimekiri: kodus olemas */
+.receipt .ln label{cursor:pointer}
+.receipt .ln.got label{text-decoration:line-through;color:var(--muted)}
+.receipt .ln.have label,.receipt .ln.have .qty{color:var(--muted)}
+.receipt .ln.have label{text-decoration:line-through dotted}
+.havebtn{border:0;background:none;padding:0 0 0 2px;font:inherit;font-size:11.5px;color:var(--accent-ink);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+/* retseptiakna nupud ja toiduvalik */
+.sheet-actions{display:flex;flex-wrap:wrap;gap:10px;padding-top:4px;border-top:1px solid var(--line)}
+.sheet-actions .btn{flex:1 1 200px}
+.chooser-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sheet .x.static{position:static;flex:none;box-shadow:none;background:var(--bg)}
+.pick-q{font:inherit;font-size:16px;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);width:100%}
+.pick-list{display:flex;flex-direction:column;gap:6px}
+.pick-item{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:6px 10px 6px 6px;cursor:pointer;font:inherit}
+.pick-item:hover{border-color:var(--primary)}
+.pick-item.cur{border-color:var(--accent);background:var(--accent-soft)}
+.pick-item img{width:56px;height:56px;object-fit:cover;border-radius:8px;display:block}
+.pi-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pi-t small{color:var(--muted);font-size:12.5px}
+.pi-cur{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-ink)}
+/* lüliti */
+.toggle{flex-direction:row!important;align-items:flex-start;gap:12px!important;cursor:pointer}
+.toggle input{accent-color:var(--primary);width:22px;height:22px;flex:none;margin-top:2px}
+.toggle span{display:flex;flex-direction:column;gap:2px}
+.toggle small{color:var(--muted);font-size:13.5px}
 .person{display:flex;flex-direction:column;gap:8px;padding:12px 0;border-top:1px dashed var(--line)}
 .person-h{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .person-h input[type=text]{flex:1 1 160px;min-width:0;font:inherit;font-weight:600;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
@@ -235,7 +260,7 @@ const TIERS=[
 const NUM=["","ühele","kahele","kolmele","neljale","viiele","kuuele","seitsmele","kaheksale","üheksale","kümnele"];
 const forN=n=>`${NUM[n]||n} inimesele`;
 
-/*HINNAD*/const PRICES={"date":"2026-11-15","idx":{"maxima":1,"rimi":1,"selver":1.05},"stores":{"maxima":{"kreeka jogurt":[1.05,1.89,2.42],"piim":[0.59,1.05,1.29],"granola":[2.59,3.9,4.49],"kiivi":[0.37,0.64,0.64],"mandlid":[3.58,5.57,6.44],"täisteraleib":[0.81,1.15,1.29],"avokaado":[0.97,0.97,0.97],"munad":[2.7,2.8,3],"spinat":[1.2,1.49,1.49],"oliiviõli":[4.59,8.35,10.49],"chia seemned":[1.42,2.89,2.89],"kaerajook":[1.59,3.25,3.65],"mango":[2.19,3.79,3.79],"maasikad":[3.12,4.99,4.99],"mustikad":[3.09,3.99,3.99],"banaan":[0.15,0.15,0.15],"mesi":[4.81,5.62,6.74],"nisujahu":[0.75,1.15,1.25],"kanafilee":[2.39,3.74,3.99],"punased oad":[0.96,1.28,2.06],"mais":[1.48,1.75,2.42],"kirsstomatid":[2.59,2.59,2.59],"punane kapsas":[1.15,2.19,2.19],"salatisegu":[1.99,1.99,1.99],"porgand":[0.04,0.11,0.11],"brokoli":[1.48,1.48,1.96],"riis":[1.59,2.68,3.34],"roheline sibul":[0.73,0.73,0.73],"sojakaste":[0.87,2.59,2.59],"purustatud tomatid":[1.42,1.59,1.95],"koriander":[0.99,0.99,0.99],"garam masala":[1.59,1.94,1.94],"täisteraspagetid":[0.99,1.39,2.25],"basiilik":[2.19,2.19,2.19],"mustad oad":[1.39,1.71,2.66],"laim":[0.39,0.39,0.39],"kikerherned":[0.82,1.41,2.06],"parmesan":[2.18,2.41,2.41],"veiseliha ribad":[6,6,14.53],"jasmiiniriis":[1.39,1.83,1.83],"veisehakkliha":[4.99,5.2,5.2],"kinoa":[3.99,4.83,4.83],"riivjuust":[1.25,1.84,1.97],"sushiriis":[1.99,2.31,2.79],"kurk":[0.99,1.41,1.41],"edamame":[2.55,2.59,2.59],"seesamiseemned":[0.8,1.33,1.59],"tursafilee":[4.99,4.99,4.99],"sidrun":[0.24,0.24,0.24],"petersell":[0.89,0.89,0.89],"krevetid":[4.84,11.18,12.11],"fettuccine":[1,2.06,2.19],"küüslauk":[0.5,1.5,1.5],"punane sibul":[0.19,0.19,0.19],"fetajuust":[1.69,2.52,2.52],"kookospiim":[2.86,3.15,4.46],"karripulber":[0.56,0.56,1.17],"bataat":[2.79,2.79,2.79],"pruun riis":[1.39,2.25,3.48],"idud":[1.76,4.73,4.73],"tofu":[2.01,2.11,2.11],"šampinjonid":[3.18,3.19,4],"valged oad":[0.69,1.39,1.39],"kartul":[0.43,1.29,1.29],"falafel":[3.78,3.78,3.78],"hummus":[1.39,2.39,2.62],"tomat":[0.56,0.59,1.41],"kodujuust":[2.44,3.39,4.22],"murulauk":[1.19,3.57,3.57],"toorjuust":[1.12,1.54,1.99],"suitsulõhe":[2.41,2.89,2.89],"teriyaki kaste":[3.5,6.64,6.92],"rohelised oad":[1.39,1.39,1.39],"punased läätsed":[2.84,2.84,2.84],"kõrvits":[1.19,1.19,1.19],"kõrvitsaseemned":[1.5,1.74,1.74],"pesto":[1.74,3.46,3.55],"munanuudlid":[1.95,2.15,2.56],"lavašš":[1.12,1.19,1.19],"kanakoivad":[2.69,2.99,2.99],"burgerikukkel":[2.45,2.45,2.45],"penne":[0.99,1.99,2.25],"kaerahelbed":[0.79,1,1.29]},"rimi":{"kaerahelbed":[0.34,1.01,1.01],"kreeka jogurt":[0.89,1.83,2.04],"vaarikad":[4.99,4.99,4.99],"piim":[0.75,1.25,1.64],"granola":[2.65,2.92,4.3],"kiivi":[0.37,0.39,0.67],"mandlid":[3.99,4.11,8.09],"täisteraleib":[0.53,1.09,1.34],"avokaado":[0.85,0.91,2.12],"munad":[1.6,3.6,3.6],"spinat":[1.59,1.59,1.59],"oliiviõli":[4.99,9.79,10.49],"chia seemned":[1.79,3.42,3.55],"kaerajook":[1.69,2.75,2.75],"maasikad":[3.49,3.49,3.49],"mustikad":[3.59,7.99,7.99],"banaan":[0.15,0.36,0.36],"mesi":[4.9,5.69,6.74],"nisujahu":[0.32,0.96,0.96],"kanafilee":[2.55,5.15,5.19],"punased oad":[0.95,1.49,1.55],"mais":[1.28,2.15,2.89],"kirsstomatid":[3.24,3.24,3.24],"punane kapsas":[1.19,2.69,2.69],"salatisegu":[1.89,2.36,2.36],"suvikõrvits":[0.65,0.67,0.67],"paprika":[0.48,1.45,1.45],"porgand":[0.03,0.1,0.1],"brokoli":[1.53,1.79,1.79],"riis":[0.79,2.38,2.38],"roheline sibul":[0.5,0.5,0.5],"sojakaste":[0.77,2.31,2.31],"purustatud tomatid":[0.94,1.69,2.36],"koriander":[2.39,2.39,2.39],"garam masala":[1.79,1.79,1.79],"kalkunihakkliha":[5.89,5.89,5.89],"täisteraspagetid":[0.99,0.99,0.99],"basiilik":[2.19,2.49,2.49],"mustad oad":[1.55,1.8,1.8],"laim":[0.34,0.34,0.34],"kikerherned":[0.99,1.29,1.74],"parmesan":[3,4.29,4.29],"jasmiiniriis":[1.39,1.83,1.83],"veisehakkliha":[3.75,4.99,4.99],"kinoa":[2.99,2.99,2.99],"riivjuust":[1.38,1.64,1.99],"lõhefilee":[11.18,13.03,13.03],"sushiriis":[1.59,2.87,2.87],"kurk":[0.9,2.69,2.69],"edamame":[2.55,3.64,3.64],"seesamiseemned":[1.19,1.53,1.53],"sidrun":[0.2,0.43,0.51],"petersell":[0.73,1.23,1.23],"krevetid":[3.99,11.09,11.09],"fettuccine":[2.29,2.35,2.35],"küüslauk":[0.5,0.99,0.99],"punane sibul":[0.21,0.24,0.24],"tortillad":[2.46,2.5,3.19],"fetajuust":[1.31,2.45,2.99],"kookospiim":[2.15,2.55,4.3],"bataat":[1.99,1.99,1.99],"pruun riis":[1.44,1.99,1.99],"lehtkapsas":[1.91,1.91,1.91],"idud":[1.86,2.65,4.64],"tofu":[1.49,2.6,2.6],"šampinjonid":[1.6,2.29,3.99],"valged oad":[0.65,0.95,0.99],"kartul":[0.41,1.23,1.23],"seller":[1.99,1.99,1.99],"falafel":[3.59,3.59,3.59],"hummus":[1.46,2.61,2.62],"tomat":[0.24,0.53,0.6],"kodujuust":[1.79,3.13,3.32],"murulauk":[2.39,2.39,2.39],"toorjuust":[1.29,2.17,2.29],"suitsulõhe":[4.69,4.69,4.69],"teriyaki kaste":[6.26,6.92,6.92],"punased läätsed":[1.35,1.59,2.29],"kõrvits":[1.19,3.57,3.57],"kõrvitsaseemned":[2.39,2.45,4.04],"pesto":[1.69,3.2,3.77],"munanuudlid":[1.48,1.49,1.7],"õun":[0.11,0.32,0.32],"lavašš":[1.19,1.19,1.19],"kalkunifilee":[5.76,5.99,5.99],"kanakoivad":[2.19,3.75,3.75],"burgerikukkel":[2.49,3.58,3.58],"rooma salat":[1.99,4.35,4.35],"penne":[1.25,1.39,1.59]},"selver":{"kaerahelbed":[1,1.2,1.29],"kreeka jogurt":[1.57,2.09,3.92],"vaarikad":[5.96,7.19,7.85],"piim":[0.62,1.25,1.55],"granola":[1.99,3.93,4.89],"kiivi":[0.2,0.61,0.61],"täisteraleib":[0.82,1.14,1.37],"avokaado":[1.21,1.36,3.03],"munad":[1.9,3.3,3.9],"tšillihelbed":[0.53,0.53,0.53],"spinat":[1.99,1.99,1.99],"oliiviõli":[7.49,9.79,10.49],"chia seemned":[1.75,1.75,1.75],"kaerajook":[1.59,2.79,3.69],"mango":[2.5,2.5,2.5],"münt":[2.39,2.39,2.39],"maasikad":[4.87,12.37,12.37],"mustikad":[3.98,4.53,7.85],"banaan":[0.15,0.15,0.15],"mesi":[4.27,6.29,6.44],"nisujahu":[0.32,0.96,0.96],"punased oad":[1.29,1.55,2.28],"punane kapsas":[0.99,0.99,0.99],"salatisegu":[2.98,2.98,2.98],"suvikõrvits":[0.62,0.62,0.62],"paprika":[0.48,0.9,1.21],"porgand":[0.04,0.12,0.12],"brokoli":[1.47,2.09,3.67],"riis":[0.39,1.18,1.18],"roheline sibul":[1.15,3.13,3.13],"sojakaste":[0.88,2.21,2.21],"purustatud tomatid":[1.49,1.89,1.89],"koriander":[1,1,1],"garam masala":[1.55,1.55,1.55],"täisteraspagetid":[1.47,1.47,1.47],"mustad oad":[1.39,1.85,1.85],"laim":[0.39,0.39,0.39],"kikerherned":[1.03,1.78,1.87],"veiseliha ribad":[8.94,8.94,8.94],"jasmiiniriis":[1.2,2.15,2.99],"veisehakkliha":[7.72,10.65,10.65],"kinoa":[2.42,3.08,4.68],"riivjuust":[1.26,2.01,3.14],"lõhefilee":[9.96,11.96,11.96],"sushiriis":[1.99,1.99,1.99],"kurk":[1.2,1.2,1.2],"edamame":[2.39,2.39,2.39],"seesamiseemned":[0.8,1.17,1.99],"sidrun":[0.23,0.23,0.23],"krevetid":[9.96,12.98,14.9],"küüslauk":[0.54,1.62,1.62],"punane sibul":[0.21,0.21,0.21],"tortillad":[2.36,3.39,4.37],"fetajuust":[3.34,3.34,3.34],"kookospiim":[2.96,3.79,3.79],"bataat":[1.99,1.99,1.99],"pruun riis":[1.69,3.13,3.13],"lehtkapsas":[3.19,3.19,3.19],"idud":[1.79,1.79,1.79],"tofu":[2.08,2.15,2.69],"šampinjonid":[1.88,3.59,3.59],"valged oad":[0.61,1.82,1.82],"kartul":[0.37,1.11,1.11],"seller":[2.47,2.47,2.47],"hummus":[1.75,2.43,3.07],"tomat":[0.3,0.48,0.48],"kodujuust":[2.85,3.35,4.3],"murulauk":[2.49,2.49,2.49],"toorjuust":[1.05,2.24,2.3],"suitsulõhe":[3.68,4.39,4.69],"teriyaki kaste":[4.46,7.24,7.24],"punased läätsed":[3.55,5.35,5.35],"kõrvits":[1.59,1.59,1.59],"kõrvitsaseemned":[1.73,1.88,3.32],"pesto":[2.21,3.2,3.46],"munanuudlid":[1.45,1.68,1.68],"õun":[0.14,0.43,0.43],"kalkunifilee":[6.84,6.84,6.84],"burgerikukkel":[2.45,3.94,3.94],"rooma salat":[1.99,1.99,1.99],"penne":[1.47,1.47,1.47]}}};/*HINNAD-LÕPP*/
+/*HINNAD*/const PRICES={"date":"2026-11-15","idx":{"maxima":1,"rimi":1,"selver":1.06},"stores":{"maxima":{"kreeka jogurt":[1.05,1.89,2.42],"piim":[0.59,1.05,1.29],"granola":[2.59,3.9,4.49],"kiivi":[0.37,0.64,0.64],"mandlid":[3.58,5.57,6.44],"täisteraleib":[0.81,1.15,1.29],"avokaado":[0.97,0.97,0.97],"munad":[2.7,2.8,3],"spinat":[1.2,1.49,1.49],"oliiviõli":[4.59,8.35,10.49],"chia seemned":[1.42,2.89,2.89],"kaerajook":[1.59,3.25,3.65],"mango":[2.19,3.79,3.79],"maasikad":[3.12,4.99,4.99],"mustikad":[3.09,3.99,3.99],"banaan":[0.15,0.15,0.15],"mesi":[4.81,5.62,6.74],"nisujahu":[0.75,1.15,1.25],"kanafilee":[2.39,3.74,3.99],"punased oad":[0.96,1.28,2.06],"mais":[1.48,1.75,2.42],"kirsstomatid":[2.59,2.59,2.59],"punane kapsas":[1.15,2.19,2.19],"salatisegu":[1.99,1.99,1.99],"porgand":[0.04,0.11,0.11],"brokoli":[1.48,1.48,1.96],"riis":[1.59,2.68,3.34],"roheline sibul":[0.73,0.73,0.73],"sojakaste":[0.87,2.59,2.59],"purustatud tomatid":[1.42,1.59,1.95],"koriander":[0.99,0.99,0.99],"garam masala":[1.59,1.94,1.94],"täisteraspagetid":[0.99,1.39,2.25],"basiilik":[2.19,2.19,2.19],"mustad oad":[1.39,1.71,2.66],"laim":[0.39,0.39,0.39],"kikerherned":[0.82,1.41,2.06],"parmesan":[2.18,2.41,2.41],"veiseliha ribad":[6,6,14.53],"jasmiiniriis":[1.39,1.83,1.83],"veisehakkliha":[4.99,5.2,5.2],"kinoa":[3.99,4.83,4.83],"riivjuust":[1.25,1.84,1.97],"sushiriis":[1.99,2.31,2.79],"kurk":[0.99,1.41,1.41],"edamame":[2.55,2.59,2.59],"seesamiseemned":[0.8,1.33,1.59],"tursafilee":[4.99,4.99,4.99],"sidrun":[0.24,0.24,0.24],"petersell":[0.89,0.89,0.89],"krevetid":[4.84,11.18,12.11],"fettuccine":[1,2.06,2.19],"küüslauk":[0.5,1.5,1.5],"punane sibul":[0.19,0.19,0.19],"fetajuust":[1.69,2.52,2.52],"kookospiim":[2.86,3.15,4.46],"karripulber":[0.56,0.56,1.17],"bataat":[2.79,2.79,2.79],"pruun riis":[1.39,2.25,3.48],"idud":[1.76,4.73,4.73],"tofu":[2.01,2.11,2.11],"šampinjonid":[3.18,3.19,4],"valged oad":[0.69,1.39,1.39],"kartul":[0.43,1.29,1.29],"falafel":[3.78,3.78,3.78],"hummus":[1.39,2.39,2.62],"tomat":[0.56,0.59,1.41],"kodujuust":[2.44,3.39,4.22],"murulauk":[1.19,3.57,3.57],"toorjuust":[1.12,1.54,1.99],"suitsulõhe":[2.41,2.89,2.89],"teriyaki kaste":[3.5,6.64,6.92],"rohelised oad":[1.39,1.39,1.39],"punased läätsed":[2.84,2.84,2.84],"kõrvits":[1.19,1.19,1.19],"kõrvitsaseemned":[1.5,1.74,1.74],"pesto":[1.74,3.46,3.55],"munanuudlid":[1.95,2.15,2.56],"lavašš":[1.12,1.19,1.19],"kanakoivad":[2.69,2.99,2.99],"burgerikukkel":[2.45,2.45,2.45],"penne":[0.99,1.99,2.25],"kaerahelbed":[0.79,1,1.29],"juust":[2.53,3.77,3.81],"röstsai":[0.65,1.59,1.63],"müsli":[2.85,3.99,3.99],"jogurt":[0.98,1.18,2.04],"tatar":[1.86,3.48,4.65],"kohupiim":[0.74,1.44,1.44],"sea-veise hakkliha":[3.49,4.39,5.75],"sibul":[0.06,0.13,0.13],"sink":[1.34,1.6,1.9],"koor":[0.88,0.88,0.88],"kuivatatud aprikoosid":[3.45,3.45,3.99],"tuunikala":[2.11,2.11,2.11],"farfalle":[1.39,1.99,2.69],"makaronid":[0.35,1.05,1.05],"või":[0.92,2.49,2.49]},"rimi":{"kaerahelbed":[0.34,1.01,1.01],"kreeka jogurt":[0.89,1.83,2.04],"vaarikad":[4.99,4.99,4.99],"piim":[0.75,1.25,1.64],"granola":[2.65,2.92,4.3],"kiivi":[0.37,0.39,0.67],"mandlid":[3.99,4.11,8.09],"täisteraleib":[0.53,1.09,1.34],"avokaado":[0.85,0.91,2.12],"munad":[1.6,3.6,3.6],"spinat":[1.59,1.59,1.59],"oliiviõli":[4.99,9.79,10.49],"chia seemned":[1.79,3.42,3.55],"kaerajook":[1.69,2.75,2.75],"maasikad":[3.49,3.49,3.49],"mustikad":[3.59,7.99,7.99],"banaan":[0.15,0.36,0.36],"mesi":[4.9,5.69,6.74],"nisujahu":[0.32,0.96,0.96],"kanafilee":[2.55,5.15,5.19],"punased oad":[0.95,1.49,1.55],"mais":[1.28,2.15,2.89],"kirsstomatid":[3.24,3.24,3.24],"punane kapsas":[1.19,2.69,2.69],"salatisegu":[1.89,2.36,2.36],"suvikõrvits":[0.65,0.67,0.67],"paprika":[0.48,1.45,1.45],"porgand":[0.03,0.1,0.1],"brokoli":[1.53,1.79,1.79],"riis":[0.79,2.38,2.38],"roheline sibul":[0.5,0.5,0.5],"sojakaste":[0.77,2.31,2.31],"purustatud tomatid":[0.94,1.69,2.36],"koriander":[2.39,2.39,2.39],"garam masala":[1.79,1.79,1.79],"kalkunihakkliha":[5.89,5.89,5.89],"täisteraspagetid":[0.99,0.99,0.99],"basiilik":[2.19,2.49,2.49],"mustad oad":[1.55,1.8,1.8],"laim":[0.34,0.34,0.34],"kikerherned":[0.99,1.29,1.74],"parmesan":[3,4.29,4.29],"jasmiiniriis":[1.39,1.83,1.83],"veisehakkliha":[3.75,4.99,4.99],"kinoa":[2.99,2.99,2.99],"riivjuust":[1.38,1.64,1.99],"lõhefilee":[11.18,13.03,13.03],"sushiriis":[1.59,2.87,2.87],"kurk":[0.9,2.69,2.69],"edamame":[2.55,3.64,3.64],"seesamiseemned":[1.19,1.53,1.53],"sidrun":[0.2,0.43,0.51],"petersell":[0.73,1.23,1.23],"krevetid":[3.99,11.09,11.09],"fettuccine":[2.29,2.35,2.35],"küüslauk":[0.5,0.99,0.99],"punane sibul":[0.21,0.24,0.24],"tortillad":[2.46,2.5,3.19],"fetajuust":[1.31,2.45,2.99],"kookospiim":[2.15,2.55,4.3],"bataat":[1.99,1.99,1.99],"pruun riis":[1.44,1.99,1.99],"lehtkapsas":[1.91,1.91,1.91],"idud":[1.86,2.65,4.64],"tofu":[1.49,2.6,2.6],"šampinjonid":[1.6,2.29,3.99],"valged oad":[0.65,0.95,0.99],"kartul":[0.41,1.23,1.23],"seller":[1.99,1.99,1.99],"falafel":[3.59,3.59,3.59],"hummus":[1.46,2.61,2.62],"tomat":[0.24,0.53,0.6],"kodujuust":[1.79,3.13,3.32],"murulauk":[2.39,2.39,2.39],"toorjuust":[1.29,2.17,2.29],"suitsulõhe":[4.69,4.69,4.69],"teriyaki kaste":[6.26,6.92,6.92],"punased läätsed":[1.35,1.59,2.29],"kõrvits":[1.19,3.57,3.57],"kõrvitsaseemned":[2.39,2.45,4.04],"pesto":[1.69,3.2,3.77],"munanuudlid":[1.48,1.49,1.7],"õun":[0.11,0.32,0.32],"lavašš":[1.19,1.19,1.19],"kalkunifilee":[5.76,5.99,5.99],"kanakoivad":[2.19,3.75,3.75],"burgerikukkel":[2.49,3.58,3.58],"rooma salat":[1.99,4.35,4.35],"penne":[1.25,1.39,1.59],"juust":[1.64,3.18,3.71],"baguette":[1.25,1.27,1.69],"röstsai":[0.79,1.55,1.55],"müsli":[2,3.93,4.43],"jogurt":[0.9,1.18,1.18],"tatar":[1.86,4.22,4.65],"kohupiim":[0.84,1.15,1.44],"sea-veise hakkliha":[2.99,3.85,4.43],"sibul":[0.07,0.15,0.15],"sink":[1.25,1.25,1.25],"koor":[0.74,0.74,0.74],"kuivatatud aprikoosid":[2.65,3.14,3.99],"tuunikala":[1.65,2.76,4.13],"farfalle":[0.99,2.19,2.35],"makaronid":[0.74,1.39,1.39],"või":[0.99,2.49,2.49]},"selver":{"kaerahelbed":[1,1.2,1.29],"kreeka jogurt":[1.57,2.09,3.92],"vaarikad":[5.96,7.19,7.85],"piim":[0.62,1.25,1.55],"granola":[1.99,3.93,4.89],"kiivi":[0.2,0.61,0.61],"täisteraleib":[0.82,1.14,1.37],"avokaado":[1.21,1.36,3.03],"munad":[1.9,3.3,3.9],"tšillihelbed":[0.53,0.53,0.53],"spinat":[1.99,1.99,1.99],"oliiviõli":[7.49,9.79,10.49],"chia seemned":[1.75,1.75,1.75],"kaerajook":[1.59,2.79,3.69],"mango":[2.5,2.5,2.5],"münt":[2.39,2.39,2.39],"maasikad":[4.87,12.37,12.37],"mustikad":[3.98,4.53,7.85],"banaan":[0.15,0.15,0.15],"mesi":[4.27,6.29,6.44],"nisujahu":[0.32,0.96,0.96],"punased oad":[1.29,1.55,2.28],"punane kapsas":[0.99,0.99,0.99],"salatisegu":[2.98,2.98,2.98],"suvikõrvits":[0.62,0.62,0.62],"paprika":[0.48,0.9,1.21],"porgand":[0.04,0.12,0.12],"brokoli":[1.47,2.09,3.67],"riis":[0.39,1.18,1.18],"roheline sibul":[1.15,3.13,3.13],"sojakaste":[0.88,2.21,2.21],"purustatud tomatid":[1.49,1.89,1.89],"koriander":[1,1,1],"garam masala":[1.55,1.55,1.55],"täisteraspagetid":[1.47,1.47,1.47],"mustad oad":[1.39,1.85,1.85],"laim":[0.39,0.39,0.39],"kikerherned":[1.03,1.78,1.87],"veiseliha ribad":[8.94,8.94,8.94],"jasmiiniriis":[1.2,2.15,2.99],"veisehakkliha":[7.72,10.65,10.65],"kinoa":[2.42,3.08,4.68],"riivjuust":[1.26,2.01,3.14],"lõhefilee":[9.96,11.96,11.96],"sushiriis":[1.99,1.99,1.99],"kurk":[1.2,1.2,1.2],"edamame":[2.39,2.39,2.39],"seesamiseemned":[0.8,1.17,1.99],"sidrun":[0.23,0.23,0.23],"krevetid":[9.96,12.98,14.9],"küüslauk":[0.54,1.62,1.62],"punane sibul":[0.21,0.21,0.21],"tortillad":[2.36,3.39,4.37],"fetajuust":[3.34,3.34,3.34],"kookospiim":[2.96,3.79,3.79],"bataat":[1.99,1.99,1.99],"pruun riis":[1.69,3.13,3.13],"lehtkapsas":[3.19,3.19,3.19],"idud":[1.79,1.79,1.79],"tofu":[2.08,2.15,2.69],"šampinjonid":[1.88,3.59,3.59],"valged oad":[0.61,1.82,1.82],"kartul":[0.37,1.11,1.11],"seller":[2.47,2.47,2.47],"hummus":[1.75,2.43,3.07],"tomat":[0.3,0.48,0.48],"kodujuust":[2.85,3.35,4.3],"murulauk":[2.49,2.49,2.49],"toorjuust":[1.05,2.24,2.3],"suitsulõhe":[3.68,4.39,4.69],"teriyaki kaste":[4.46,7.24,7.24],"punased läätsed":[3.55,5.35,5.35],"kõrvits":[1.59,1.59,1.59],"kõrvitsaseemned":[1.73,1.88,3.32],"pesto":[2.21,3.2,3.46],"munanuudlid":[1.45,1.68,1.68],"õun":[0.14,0.43,0.43],"kalkunifilee":[6.84,6.84,6.84],"burgerikukkel":[2.45,3.94,3.94],"rooma salat":[1.99,1.99,1.99],"penne":[1.47,1.47,1.47],"juust":[2.39,4.16,5.26],"baguette":[1.66,1.66,2],"röstsai":[0.69,1.85,1.85],"müsli":[3.13,4.06,4.14],"jogurt":[0.88,1.04,1.05],"tatar":[0.93,2.79,2.79],"kohupiim":[1.1,1.46,2.07],"sea-veise hakkliha":[4.43,4.99,5.83],"tuunikala":[1.33,1.74,2.45],"farfalle":[1.99,2.59,2.99],"makaronid":[0.99,1.49,2.48],"või":[1.72,2.63,3.29]}}};/*HINNAD-LÕPP*/
 // ---------- Koostisosad ----------
 // [ühik, toiteväärtus 100 g/ml kohta (tk puhul 1 tk kohta): kcal, valk, süsivesikud, rasv, kiudained, kategooria,
 //   müügiviis: "p" pakend | "pc" tükk | "kg" kaalukaup, pakendi suurus, hinnad [soodne, keskmine, premium], pakendi nimi, hinnanguline?]
@@ -338,7 +363,27 @@ const ING={
  "kanakoivad":["g",[150,15,0,10,0],"L","p",500,[2.49,2.49,3.99],"Broileri poolkoivad"],
  "burgerikukkel":["tk",[220,8,40,3.5,2],"T","p",4,[2.49,2.49,3.99],"Burgerikuklid seesamiga"],
  "rooma salat":["g",[17,1.2,3.3,.3,2.1],"K","p",200,[1.99,1.99,1.99],"Rooma salat"],
- "penne":["g",[350,13,65,2.5,8],"T","p",500,[1.25,1.25,1.59],"Täistera penne"]
+ "penne":["g",[350,13,65,2.5,8],"T","p",500,[1.25,1.25,1.59],"Täistera penne"],
+ // lisatud igapäevatoitude jaoks
+ "juust":["g",[350,26,0,27,0],"P","p",300,[1.99,3.29,4.49],"Juust, viilutatud"],
+ "baguette":["g",[260,9,50,2.5,3],"T","p",250,[.89,1.29,1.89],"Baguette"],
+ "röstsai":["g",[270,8,48,4,3],"T","p",500,[.79,1.39,1.99],"Röstsai"],
+ "müsli":["g",[380,9,64,8,8],"T","p",500,[1.49,2.49,3.49],"Müsli"],
+ "jogurt":["g",[60,4,4.5,3,0],"P","p",500,[.79,1.29,1.79],"Maitsestamata jogurt"],
+ "tatar":["g",[343,13,72,3.4,10],"T","p",1000,[1.79,2.49,3.49],"Tatar"],
+ "kohupiim":["g",[120,17,3,5,0],"P","p",250,[.89,1.29,1.69],"Kohupiim"],
+ "põldmurakad":["g",[43,1.4,10,.5,5],"K","p",300,[2.99,3.49,4.49],"Põldmurakad, külmutatud",1],
+ "sea-veise hakkliha":["g",[230,17,0,18,0],"L","p",500,[3.49,4.39,5.49],"Sea-veise hakkliha"],
+ "sibul":["tk",[60,1.6,14,.2,2.6],"K","pc",1,[.07,.09,.15],"Sibul"],
+ "sink":["g",[110,18,2,3.5,0],"L","p",150,[1.29,1.99,2.79],"Keedusink"],
+ "koor":["ml",[120,3,4,10,0],"P","p",200,[.79,1.09,1.49],"Toiduvalmistamise koor"],
+ "pohlad":["g",[50,.7,11,.5,3],"K","p",300,[2.49,2.99,3.99],"Pohlad, külmutatud",1],
+ "forell":["g",[140,20,0,6.5,0],"L","kg",1000,[9.99,12.99,16.99],"Forell, terve",1],
+ "kuivatatud aprikoosid":["g",[241,3.4,63,.5,7.3],"T","p",200,[1.99,2.49,3.29],"Kuivatatud aprikoosid"],
+ "tuunikala":["g",[116,26,0,1,0],"L","p",120,[1.29,1.79,2.49],"Tuunikalakonserv (vees)"],
+ "farfalle":["g",[360,12.5,72,1.5,3],"T","p",500,[.89,1.49,2.29],"Farfalle pasta"],
+ "makaronid":["g",[360,12.5,72,1.5,3],"T","p",500,[.69,1.29,1.99],"Makaronid"],
+ "või":["g",[740,.6,.6,82,0],"P","p",200,[2.29,2.79,3.49],"Või"]
 };
 const CAT={L:"Liha ja kala",P:"Piim ja munad",K:"Puu- ja köögiviljad",T:"Teraviljad ja kaunviljad",M:"Muu"};
 
@@ -453,7 +498,38 @@ const R=[
  {n:"Kalkuni-oa tšilli",s:"pea",t:["kaunviljad","mehhiko","vurts"],m:40,i:[["kalkunihakkliha",120],["punased oad",100],["mais",40],["purustatud tomatid",150],["punane sibul",.25],["tšillihelbed",1]],
   h:["Prae hakitud sibul ja kalkunihakkliha pruuniks.","Lisa tšillihelbed ja tomatid.","Lisa oad ja mais ning hauta 20 minutit.","Maitsesta soola ja pipraga."]},
  {n:"Kinoasalat tomati, kurgi ja ürtidega",s:"pea",t:["taimne","vahemere","koogiviljad"],m:20,i:[["kinoa",50],["kirsstomatid",80],["kurk",.5],["punane sibul",.25],["petersell",10],["sidrun",.5],["oliiviõli",10]],
-  h:["Keeda kinoa ja lase jahtuda.","Lõika tomatid, kurk ja sibul väikesteks tükkideks, haki petersell.","Sega kõik kokku õli, sidrunimahla, soola ja pipraga."]}
+  h:["Keeda kinoa ja lase jahtuda.","Lõika tomatid, kurk ja sibul väikesteks tükkideks, haki petersell.","Sega kõik kokku õli, sidrunimahla, soola ja pipraga."]},
+ // --- igapäevased kodutoidud (fotod img/d54…d68) ---
+ {n:"Juustu-salativõileib",s:"hommik",t:["piim"],m:5,i:[["baguette",80],["juust",30],["salatisegu",15],["tomat",.5],["või",5]],
+  h:["Lõika sai pikuti pooleks ja määri kergelt võiga.","Laota peale salatilehed, juustuviilud ja tomativiilud.","Pane teine pool peale ja lõika pooleks."]},
+ {n:"Keedetud muna röstsaiaga",s:"hommik",t:["munad"],m:10,i:[["munad",2],["röstsai",50],["või",5]],
+  h:["Pane munad keevasse vette ja keeda 6–7 minutit (poolpehme).","Rösti saiaviilud ja määri võiga.","Lõika röstsai ribadeks ja serveeri munaga."]},
+ {n:"Jogurt müsli ja banaaniga",s:"hommik",t:["piim"],m:3,i:[["jogurt",200],["müsli",40],["banaan",.5]],
+  h:["Tõsta jogurt kaussi.","Puista peale müsli.","Lisa banaaniviilud."]},
+ {n:"Tatrapuder piimaga",s:"hommik",t:["piim"],m:15,i:[["tatar",60],["piim",250],["või",5]],
+  h:["Loputa tatar ja pane koos 150 ml vee ja näpuotsatäie soolaga keema.","Keeda kaane all tasasel tulel 10 minutit.","Lisa piim ja kuumuta läbi.","Tõsta kaussi ja lisa nupuke võid."]},
+ {n:"Kohupiim põldmurakate ja meega",s:"hommik",t:["piim"],m:5,i:[["kohupiim",150],["põldmurakad",80],["mesi",10]],
+  h:["Sulata marjad (või kasuta värskeid).","Tõsta kohupiim kaussi ja sega lusikatäie veega kohevaks.","Lisa marjad ja nirista peale mett."]},
+ {n:"Spagetid hakklihakastmega",s:"pea",t:["vahemere"],m:30,i:[["täisteraspagetid",100],["sea-veise hakkliha",120],["purustatud tomatid",150],["sibul",.5],["küüslauk",5],["parmesan",10],["basiilik",2],["oliiviõli",5]],
+  h:["Prae hakitud sibul ja küüslauk õlis pehmeks.","Lisa hakkliha ja prae pruuniks.","Lisa tomatid, maitsesta soola ja pipraga ning hauta 15 minutit.","Keeda spagetid, tõsta taldrikule, kalla peale kaste ning puista üle parmesani ja basiilikuga."]},
+ {n:"Kanasupp maisi ja köögiviljadega",s:"pea",t:["koogiviljad"],m:45,i:[["kanakoivad",200],["kartul",150],["porgand",1],["mais",40],["sibul",.5],["roheline sibul",5]],
+  h:["Pane kanakoivad 500 ml külma veega portsjoni kohta keema, lisa sool ja keeda 25 minutit.","Võta kana välja, eemalda kondid ja tükelda liha.","Lisa puljongisse kuubikuteks kartul, porgand ja sibul ning keeda 15 minutit.","Lisa mais ja kanaliha, kuumuta läbi ja puista peale rohelist sibulat."]},
+ {n:"Frikadellisupp",s:"pea",t:["koogiviljad"],m:40,i:[["sea-veise hakkliha",100],["munad",.25],["kartul",150],["porgand",1],["munanuudlid",30],["sibul",.5],["petersell",3]],
+  h:["Sega hakkliha muna, soola ja pipraga ning vormi väikesed frikadellid.","Pane 500 ml vett portsjoni kohta keema, lisa tükeldatud kartul, porgand ja sibul.","Keeda 10 minutit, lisa frikadellid ja nuudlid ning keeda veel 10 minutit.","Maitsesta ja puista peale peterselli."]},
+ {n:"Tatar singi ja tomatitega",s:"pea",t:[],m:20,i:[["tatar",80],["sink",60],["kirsstomatid",80],["basiilik",2],["oliiviõli",5]],
+  h:["Keeda tatar soolaga maitsestatud vees 15 minutit.","Sega sisse oliiviõli.","Serveeri singiviilude, poolitatud tomatite ja basiilikuga."]},
+ {n:"Lihapallid kartulipudru ja pohladega",s:"pea",t:["piim"],m:45,i:[["sea-veise hakkliha",130],["munad",.25],["kartul",250],["piim",50],["või",10],["koor",40],["pohlad",30],["kurk",.3]],
+  h:["Sega hakkliha muna, soola ja pipraga, vormi pallid ja prae pannil küpseks.","Lisa pannile koor, lase podiseda 3 minutit, et tekiks kaste.","Keeda kartulid, purusta need kuuma piima ja võiga pudruks.","Serveeri lihapallid pudru, kastme, pohlade ja kurgiviiludega."]},
+ {n:"Ahjukala kartulitega",s:"pea",t:[],m:45,i:[["forell",250],["kartul",250],["kirsstomatid",60],["kurk",.25],["laim",.5],["oliiviõli",10]],
+  h:["Kuumuta ahi 200 °C-ni. Lõika kartulid sektoriteks, sega poole õliga ja küpseta 20 minutit.","Maitsesta puhastatud kala seest ja väljast soola, pipra ja laimiga ning määri õliga.","Pane kala kartulite kõrvale ja küpseta veel 20 minutit.","Serveeri tomatite, kurgi ja laimiviiludega."]},
+ {n:"Plov veiseliha ja aprikoosidega",s:"pea",t:[],m:60,i:[["riis",80],["veiseliha ribad",120],["porgand",1],["sibul",.5],["kuivatatud aprikoosid",30],["küüslauk",5],["oliiviõli",10]],
+  h:["Prae lihatükid paksupõhjalises potis õlis pruuniks.","Lisa ribadeks porgand ja sibul ning prae 5 minutit.","Lisa loputatud riis, aprikoosid, terve küüslauk, sool ja 160 ml vett portsjoni kohta.","Hauta kaane all tasasel tulel 25–30 minutit, kuni riis on pehme."]},
+ {n:"Kanapasta koorekastmes paprikaga",s:"pea",t:["piim"],m:25,i:[["penne",90],["kanafilee",130],["paprika",.5],["koor",80],["münt",1]],
+  h:["Keeda pasta.","Lõika kana tükkideks ja prae küpseks, lisa paprikaribad ja prae 3 minutit.","Vala peale koor, maitsesta soola, pipra ja ürtidega ning lase 3 minutit podiseda.","Sega pastaga ja kaunista mündilehega."]},
+ {n:"Tuunikalapasta tomati ja fetaga",s:"pea",t:["vahemere"],m:15,i:[["farfalle",90],["tuunikala",80],["kirsstomatid",80],["fetajuust",30],["petersell",5],["oliiviõli",10]],
+  h:["Keeda pasta.","Nõruta tuunikala ja poolita tomatid.","Sega pasta õli, tuunikala ja tomatitega.","Puista peale murendatud feta ja hakitud petersell."]},
+ {n:"Ahjupasta hakklihaga",s:"pea",t:[],m:45,i:[["makaronid",90],["sea-veise hakkliha",100],["purustatud tomatid",150],["sibul",.5],["riivjuust",30],["petersell",3]],
+  h:["Kuumuta ahi 200 °C-ni ja keeda makaronid poolpehmeks.","Prae sibul ja hakkliha, lisa tomatid ja maitsesta.","Sega makaronid kastmega, tõsta vormi ja puista üle juustuga.","Küpseta 20 minutit ja puista peale peterselli."]}
 ];
 R.forEach((r,i)=>{
   r.img="img/d"+i+".jpg";
@@ -466,7 +542,9 @@ R.forEach((r,i)=>{
     if(/veise/.test(n))t.add("veiseliha"); if(/kana/.test(n))t.add("kana"); if(/kalkun/.test(n))t.add("kalkun");
     if(/lõhe|tursa/.test(n))t.add("kala"); if(/krevet/.test(n))t.add("mereannid");
     if(/kinoa/.test(n))t.add("kinoa"); if(/riis/.test(n))t.add("riis"); if(/kaerahelb/.test(n))t.add("kaer");
-    if(/pasta|spagetid|fettuccine|penne|nuudl/.test(n))t.add("pasta"); if(/^munad$/.test(n))t.add("munad");
+    if(/pasta|spagetid|fettuccine|penne|nuudl|farfalle|makaron/.test(n))t.add("pasta");
+    if(/forell|tuunikala/.test(n))t.add("kala");
+    if(i>=54)t.add("kodu"); // igapäevased kodutoidud if(/^munad$/.test(n))t.add("munad");
     if(/jogurt|piim$|juust|parmesan|feta/.test(n))t.add("piim");
   });
   r.t=[...t];
@@ -476,7 +554,7 @@ const TASTE_GROUPS=[
   ["Liha ja kala",[["kana","Kana"],["kalkun","Kalkun"],["veiseliha","Veiseliha"],["kala","Kala"],["mereannid","Mereannid"]]],
   ["Taimne, munad ja piim",[["taimne","Taimne toit"],["kaunviljad","Kaunviljad"],["koogiviljad","Köögiviljad"],["munad","Munad"],["piim","Piimatooted"]]],
   ["Lisandid",[["kinoa","Kinoa"],["riis","Riis"],["kaer","Kaerahelbed"],["pasta","Pasta"]]],
-  ["Maitsesuunad",[["aasia","Aasia"],["vahemere","Vahemere"],["mehhiko","Mehhiko"],["vurts","Vürtsikas"]]]];
+  ["Maitsesuunad",[["kodu","Igapäevane kodutoit"],["aasia","Aasia"],["vahemere","Vahemere"],["mehhiko","Mehhiko"],["vurts","Vürtsikas"]]]];
 const SLOTS=[["hommik","Hommikusöök"],["louna","Lõunasöök"],["ohtu","Õhtusöök"]];
 const DAYS=["Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev","Pühapäev"];
 const STEPS=["Pood","Inimesed","Hinnaklass","Maitsed","Menüü","Ostunimekiri"];
@@ -553,11 +631,17 @@ function tierEst(t){
 }
 
 // ---------- Plaani koostamine ----------
-function candidates(kind){
+// Kapi põhitooted: neid ei arvestata „ülejääkide ärakasutamise” boonuses
+const PANTRY=["oliiviõli","sojakaste","mesi","tšillihelbed","karripulber","garam masala","nisujahu","seesamiseemned","küüslauk","teriyaki kaste"];
+const kindOf=k=>k==="hommik"?"hommik":"pea";
+const isQuickDay=di=>S.quick&&di<5; // esmaspäev–reede
+// kõik toidud, mis sobivad sellele söögikorrale (arvestab „ei söö” valikuid, eelarvet ja kiireid tööpäevi)
+function candidates(kind,di){
   const no=Object.keys(S.tastes).filter(k=>S.tastes[k]==="no");
   const likes=Object.keys(S.tastes).filter(k=>S.tastes[k]==="like");
   let list=R.filter(r=>r.s===kind&&!r.t.some(t=>no.includes(t)));
   const inBudget=list.filter(r=>price(r)<=tier().max); if(inBudget.length>=3) list=inBudget;
+  if(di!=null&&isQuickDay(di)&&kind==="pea"){const q=list.filter(r=>r.m<=30);if(q.length>=3)list=q}
   return list.map(r=>{
     let w=1+2.5*r.t.filter(t=>likes.includes(t)).length;
     if(S.tier==="premium") w*=1+price(r)/4;
@@ -565,26 +649,34 @@ function candidates(kind){
     return {r,w};
   });
 }
-function pick(kind,avoid){
-  const c=candidates(kind); if(!c.length) return null;
+// have = selle nädala juba kasutatud koostisosad; toidud, mis kasutavad pooleli pakke, saavad eelise
+function pick(kind,avoid,di,have){
+  const c=candidates(kind,di); if(!c.length) return null;
   let pool=c.filter(x=>!avoid.has(x.r.n)); if(!pool.length) pool=c;
+  if(have) pool=pool.map(p=>({r:p.r,w:p.w*(1+.9*Math.min(4,p.r.i.filter(([n])=>have.has(n)&&!PANTRY.includes(n)).length))}));
   let x=Math.random()*pool.reduce((a,p)=>a+p.w,0);
   for(const p of pool){x-=p.w;if(x<=0)return p.r} return pool[pool.length-1].r;
 }
+function weekIngredients(skipDi,skipK){
+  const s=new Set();
+  plan.forEach((d,di)=>Object.entries(d).forEach(([k,r])=>{if(di!==skipDi||k!==skipK)r.i.forEach(([n])=>s.add(n))}));
+  return s;
+}
 function generate(){
-  const used=new Set(); plan=DAYS.map(()=>({}));
-  plan.forEach(d=>SLOTS.forEach(([k])=>{
+  const used=new Set(), have=new Set(); plan=DAYS.map(()=>({}));
+  plan.forEach((d,di)=>SLOTS.forEach(([k])=>{
     if(!S.slots[k]) return;
-    const r=pick(k==="hommik"?"hommik":"pea",used);
-    if(r){d[k]=r;used.add(r.n);if(used.size>20)used.clear()}
+    const r=pick(kindOf(k),used,di,have);
+    if(r){d[k]=r;used.add(r.n);r.i.forEach(([n])=>have.add(n));if(used.size>24)used.clear()}
   }));
   got=new Set(); savePlan();
 }
 function swap(di,k){
   const avoid=new Set(); plan.forEach(d=>Object.values(d).forEach(r=>avoid.add(r.n)));
-  const r=pick(k==="hommik"?"hommik":"pea",avoid); if(r) plan[di][k]=r;
+  const r=pick(kindOf(k),avoid,di,weekIngredients(di,k)); if(r) plan[di][k]=r;
   savePlan();
 }
+function setMeal(di,k,r){plan[di][k]=r;savePlan()}
 
 // ---------- Kogused ----------
 const FR={.25:"¼",.5:"½",.75:"¾",.3:"⅓"};
@@ -606,7 +698,7 @@ function shopping(){
     if(kind==="p"){count=Math.max(1,Math.ceil(q/size-0.03));buy=`${count} × ${packSize(g)}`;cost=count*p}
     else if(kind==="pc"){count=Math.max(1,Math.ceil(q-0.05));buy=`${count} tk`;cost=count*p}
     else {const kg=Math.max(.1,Math.ceil(q/100)/10);buy=`~${num(kg,1)} kg`;cost=kg*p}
-    return {n,label,cat,buy,cost,need:amt(q,u),est};
+    return {n,label,cat,buy,cost,need:amt(q,u),est,have:(S.have||[]).includes(n)};
   });
 }
 
@@ -654,6 +746,7 @@ const PAGES=[
   ()=>`${head(3,"Mis sulle maitseb?","Kõik toidud on tervislikud: palju köögivilju, täisteratooteid ja valku. Vali, mida eelistad.")}
     <div class="legend"><span><b>1 klõps</b> = meeldib, pakun sagedamini</span><span><i>2 klõpsu</i> = ei söö, jätan välja</span></div>
     ${TASTE_GROUPS.map(([g,list])=>`<div class="tgroup"><h2>${g}</h2><div class="chips">${list.map(([id,l])=>{const s=S.tastes[id]||"";return `<button class="chip" data-taste="${id}" data-s="${s}">${s==="like"?"♥ ":s==="no"?"✕ ":""}${l}</button>`}).join("")}</div></div>`).join("")}
+    <label class="toggle box"><input type="checkbox" id="quick" ${S.quick?"checked":""}><span><b>Tööpäevadel ainult kiired toidud</b><small>Esmaspäevast reedeni pakun lõunaks ja õhtuks toite, mis valmivad kuni 30 minutiga.</small></span></label>
     ${nav("Koosta menüü →")}`,
   ()=>{
     const M=meals();
@@ -684,19 +777,22 @@ const PAGES=[
   ()=>{
     const items=shopping();
     const used=meals().reduce((a,[k,r])=>a+mealCost(r,k),0);
-    const pay=items.reduce((a,x)=>a+x.cost,0);
-    const groups=Object.keys(CAT).map(c=>[c,items.filter(x=>x.cat===c).sort((a,b)=>a.label.localeCompare(b.label,"et"))]).filter(g=>g[1].length);
-    const anyEst=items.some(x=>x.est);
-    return `${head(5,"Ostunimekiri","Kogused on ümardatud poe pakenditeni. Märgi ostetud tooted maha või kopeeri nimekiri telefoni.")}
+    const buyList=items.filter(x=>!x.have), pay=buyList.reduce((a,x)=>a+x.cost,0), saved=items.filter(x=>x.have).reduce((a,x)=>a+x.cost,0);
+    const groups=Object.keys(CAT).map(c=>[c,items.filter(x=>x.cat===c).sort((a,b)=>a.have-b.have||a.label.localeCompare(b.label,"et"))]).filter(g=>g[1].length);
+    const anyEst=buyList.some(x=>x.est), gotN=buyList.filter(x=>got.has(x.n)).length;
+    const pantryN=items.filter(x=>PANTRY.includes(x.n)).length, pantryAll=pantryN&&items.filter(x=>PANTRY.includes(x.n)).every(x=>x.have);
+    let li=0;
+    return `${head(5,"Ostunimekiri","Kogused on ümardatud poe pakenditeni. Märgi ostetud tooted maha. Kui midagi on kodus juba olemas, vajuta „Mul on kodus” ja see jääb summast välja.")}
     <div class="shop">
     <aside class="shop-side">
-      <div class="stat main"><span class="k">Poes maksad</span><b>~${eur(pay)}</b><span class="s">Selle nädala toitudesse läheb ~${eur(used)}</span></div>
-      <div class="progress"><span id="gotc">Ostetud ${got.size} / ${items.length}</span><span class="bar"><i id="gotb" style="width:${Math.round(got.size/Math.max(1,items.length)*100)}%"></i></span></div>
+      <div class="stat main"><span class="k">Poes maksad</span><b>~${eur(pay)}</b><span class="s">${saved?`Kodus olemas: −${eur(saved)} · `:""}selle nädala toitudesse läheb ~${eur(used)}</span></div>
+      <div class="progress"><span id="gotc">Ostetud ${gotN} / ${buyList.length}</span><span class="bar"><i id="gotb" style="width:${Math.round(gotN/Math.max(1,buyList.length)*100)}%"></i></span></div>
       <button class="btn" id="copy">Kopeeri nimekiri</button>
-      <p class="hint">Ülejäänu (nt õli, maitseained, pooleli pakid) jääb kappi järgmiseks nädalaks.</p>
+      ${pantryN?`<button class="btn ghost" data-pantry>${pantryAll?"Õli ja maitseained: vaja osta":"Õli ja maitseained on kodus"}</button>`:""}
+      <p class="hint">Ülejäänu (nt pooleli pakid) jääb kappi. Menüü eelistab toite, mis kasutavad juba ostetud pakid ära.</p>
     </aside>
     <div class="receipt"><div class="rh"><b>${store().name.toUpperCase()}</b><br>${S.people} in · 7 päeva · ${tier().name.toLowerCase()}</div>
-      ${groups.map(([c,l])=>`<div class="cat">${CAT[c]}</div>${l.map(x=>`<label class="ln ${got.has(x.n)?"got":""}"><input type="checkbox" data-key="${x.n}" ${got.has(x.n)?"checked":""}><span>${x.label}${x.est?"*":""}</span><span class="qty">${x.buy}</span><small>vaja ${x.need} · ${eur(x.cost)}</small></label>`).join("")}`).join("")}
+      ${groups.map(([c,l])=>`<div class="cat">${CAT[c]}</div>${l.map(x=>{const id="g"+(li++);return `<div class="ln ${got.has(x.n)?"got":""} ${x.have?"have":""}"><input type="checkbox" id="${id}" data-key="${x.n}" ${got.has(x.n)?"checked":""} ${x.have?"disabled":""}><label for="${id}">${x.label}${x.est?"*":""}</label><span class="qty">${x.have?"kodus":x.buy}</span><small>${x.have?"":`vaja ${x.need} · ${eur(x.cost)} · `}<button class="havebtn" data-have="${x.n}" aria-pressed="${x.have}">${x.have?"↩ pean ostma":"mul on kodus"}</button></small></div>`}).join("")}`).join("")}
       <div class="tot"><span>POES MAKSAD ~</span><span>${eur(pay)}</span></div>
       <div class="note">${realPrices(store())?`Hinnad: ${store().src}, ${PRICE_DATE}.${anyEst?"<br>* toodet ei leitud e-poest, hind on hinnanguline.":""}`:`${store().name} hinnad on hinnangulised (Rimi hinnad × hinnatase ${Math.round(storeIdx(store())*100)}).`}</div></div>
     </div>
@@ -704,7 +800,7 @@ const PAGES=[
 ];
 
 // ---------- Retseptiaken ----------
-function openRecipe(r,k){
+function openRecipe(r,k,di){
   const m=r.mac, n=S.people, tot=pm(r,k);
   const fmtTk=q=>Math.round(q*2)/2;
   const who=anyTarget()?`<div><p class="label">Kes kui palju sööb</p><ul class="ing">${S.persons.map((_,p)=>{const f=fac(r,k,p);return `<li><span>${pname(p)}</span><span>${num(f,1)} portsjonit · ${Math.round(m[0]*f)} kcal · ${Math.round(m[1]*f)} g valku</span></li>`}).join("")}</ul></div>`:"";
@@ -722,9 +818,26 @@ function openRecipe(r,k){
       <div><p class="label">Koostisosad ${forN(n)}</p><ul class="ing">${r.i.map(([x,q])=>{const u=ING[x][0],v=q*tot;return `<li><span>${x[0].toUpperCase()+x.slice(1)}</span><span>${amt(u==="tk"&&v>=1?fmtTk(v):v,u)}</span></li>`}).join("")}</ul>
         <p class="note" style="margin-top:8px">Lisaks sool ja pipar maitse järgi.</p></div>
       <div><p class="label">Valmistamine</p><ol class="how">${r.h.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+      ${di!=null?`<div class="sheet-actions"><button class="btn ghost" data-reroll="${di}|${k}">↻ Juhuslik teine toit</button><button class="btn" data-chooser="${di}|${k}">Vali ise teine toit</button></div>`:""}
     </div></div></div>`;
   el.hidden=false; document.body.style.overflow="hidden";
   el.querySelector(".x").focus();
+}
+// Toidu valimine nimekirjast
+function openChooser(di,k){
+  const cur=plan[di][k], list=candidates(kindOf(k),di).map(x=>x.r).sort((a,b)=>a.n.localeCompare(b.n,"et"));
+  const slotName=Object.fromEntries(SLOTS)[k];
+  const el=document.getElementById("modal");
+  el.innerHTML=`<div class="modal" data-close><div class="sheet" role="dialog" aria-modal="true" aria-label="Vali toit">
+    <div class="body">
+      <div class="chooser-h"><div><p class="eyebrow">${DAYS[di]} · ${slotName}</p><h2>Vali toit</h2></div><button class="x static" data-close aria-label="Sulge">✕</button></div>
+      <input type="search" id="pick-q" class="pick-q" placeholder="Otsi toitu, nt kana, supp, pasta" aria-label="Otsi toitu">
+      <p class="hint">${list.length} sobivat toitu${isQuickDay(di)&&k!=="hommik"?" · tööpäeval ainult kuni 30 min":""}</p>
+      <div class="pick-list">${list.map(r=>`<button class="pick-item${r===cur?" cur":""}" data-pick="${di}|${k}|${R.indexOf(r)}" data-name="${(r.n+" "+r.i.map(x=>x[0]).join(" ")).toLowerCase()}">
+        <img src="${r.img}" alt="" loading="lazy"><span class="pi-t"><b>${r.n}</b><small>${r.m} min · ${Math.round(r.mac[0])} kcal · ${eur(price(r))}/portsjon</small></span>${r===cur?'<span class="pi-cur">praegu</span>':""}</button>`).join("")}</div>
+    </div></div></div>`;
+  el.hidden=false; document.body.style.overflow="hidden";
+  document.getElementById("pick-q").focus();
 }
 function closeRecipe(){const el=document.getElementById("modal");el.hidden=true;el.innerHTML="";document.body.style.overflow=""}
 
@@ -743,8 +856,13 @@ function go(i){
 document.addEventListener("click",e=>{
   if(e.target.closest("[data-close]")&&(e.target.matches("[data-close]")||e.target.closest(".x"))){closeRecipe();return}
   const o=e.target.closest("[data-open]");
-  if(o){const [di,k]=o.dataset.open.split("|");openRecipe(plan[+di][k],k);return}
+  if(o){const [di,k]=o.dataset.open.split("|");openRecipe(plan[+di][k],k,+di);return}
   const b=e.target.closest("button"); if(!b||b.disabled) return;
+  if(b.dataset.reroll){const [di,k]=b.dataset.reroll.split("|");swap(+di,k);render();openRecipe(plan[+di][k],k,+di);return}
+  if(b.dataset.chooser){const [di,k]=b.dataset.chooser.split("|");openChooser(+di,k);return}
+  if(b.dataset.pick){const [di,k,i]=b.dataset.pick.split("|");setMeal(+di,k,R[+i]);render();openRecipe(R[+i],k,+di);return}
+  if(b.dataset.have){const n=b.dataset.have;S.have=S.have||[];S.have=S.have.includes(n)?S.have.filter(x=>x!==n):[...S.have,n];save();render();return}
+  if(b.hasAttribute("data-pantry")){const items=shopping().map(x=>x.n).filter(n=>PANTRY.includes(n));S.have=S.have||[];const all=items.every(n=>S.have.includes(n));S.have=all?S.have.filter(n=>!items.includes(n)):[...new Set([...S.have,...items])];save();render();return}
   if(b.dataset.go!==undefined){go(+b.dataset.go);return}
   if(b.dataset.store){S.store=b.dataset.store;save();render();return}
   if(b.dataset.tier){S.tier=b.dataset.tier;save();render();return}
@@ -754,7 +872,7 @@ document.addEventListener("click",e=>{
   if(b.hasAttribute("data-regen")){generate();render();return}
   if(b.classList.contains("swap")){swap(+b.dataset.d,b.dataset.k);render();return}
   if(b.id==="copy"){
-    const txt=shopping().map(x=>`☐ ${x.label} – ${x.buy}`).join("\n");
+    const txt=shopping().filter(x=>!x.have).map(x=>`☐ ${x.label} – ${x.buy}`).join("\n");
     const fail=()=>{b.textContent="Kopeerimine ei õnnestunud"};
     try{navigator.clipboard.writeText(txt).then(()=>{b.textContent="Kopeeritud ✓";setTimeout(()=>b.textContent="Kopeeri nimekiri",1500)},fail)}catch(err){fail()}
   }
@@ -763,16 +881,22 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Escape"&&!document.getElementById("modal").hidden) closeRecipe();
   if((e.key==="Enter"||e.key===" ")&&e.target.matches?.("[data-open]")){e.preventDefault();e.target.click()}
 });
+document.addEventListener("input",e=>{
+  if(e.target.id!=="pick-q")return;
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".pick-item").forEach(b=>{b.hidden=!!q&&!b.dataset.name.includes(q)});
+});
 document.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset.slot){S.slots[t.dataset.slot]=t.checked;save();render()}
+  if(t.id==="quick"){S.quick=t.checked;save();render()}
   if(t.dataset.kcal!==undefined){const v=Math.round(+t.value||0);S.persons[+t.dataset.kcal].kcal=v?Math.min(5000,Math.max(1000,v)):0;save();render()}
   if(t.dataset.name!==undefined){S.persons[+t.dataset.name].name=t.value.trim().slice(0,20);save();render()}
   if(t.dataset.key){
     t.checked?got.add(t.dataset.key):got.delete(t.dataset.key);t.closest(".ln").classList.toggle("got",t.checked);
-    const n=document.querySelectorAll("[data-key]").length;
-    document.getElementById("gotc").textContent=`Ostetud ${got.size} / ${n}`;
-    document.getElementById("gotb").style.width=Math.round(got.size/Math.max(1,n)*100)+"%";
+    const keys=[...document.querySelectorAll(".ln:not(.have) [data-key]")].map(x=>x.dataset.key), n=keys.length, g=keys.filter(x=>got.has(x)).length;
+    document.getElementById("gotc").textContent=`Ostetud ${g} / ${n}`;
+    document.getElementById("gotb").style.width=Math.round(g/Math.max(1,n)*100)+"%";
     savePlan();
   }
 });

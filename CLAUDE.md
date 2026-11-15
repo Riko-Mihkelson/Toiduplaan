@@ -5,7 +5,7 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 
 ## Failid
 - `toiduplaan.html` – kogu äpp: HTML, CSS ja JavaScript ühes failis, ilma raamistiketa.
-- `img/d0.jpg … img/d53.jpg` – toidufotod (Unsplash, tasuta litsents), 360×360.
+- `img/d0.jpg … img/d68.jpg` – toidufotod (Unsplash, tasuta litsents), 360×360.
   Fotode järjekord vastab massiivi `R` järjekorrale (`r.img = "img/d"+i+".jpg"`).
 
 - `manifest.json`, `sw.js`, `icons/`, `index.html` – iPhone'i avakuva-äpp (PWA). `sw.js` hoiab faile offline;
@@ -13,6 +13,10 @@ Kasutaja valib samm-sammult: pood → inimesed ja söögikorrad → hinnaklass �
 - `.claude/launch.json` – kohalik eelvaade aadressil http://localhost:5173.
 - Värvid: `--primary` tomatipunane, `--accent` lehtroheline (CSS-i `:root` plokis, hele ja tume teema).
 - Menüü, ostetud tooted ja avatud samm salvestatakse `localStorage`-isse (`savePlan`/`restorePlan`).
+  `S.have` = tooted, mis on kodus olemas (jäävad ostunimekirja summast välja); `S.quick` = tööpäevadel ainult ≤30 min toidud.
+- Menüü koostamine (`pick`) eelistab toite, mis kasutavad sama nädala juba ostetud koostisosi (vähem raiskamist);
+  `PANTRY` (õli, maitseained) seda boonust ei saa. Retseptiaknast saab toidu ise valida (`openChooser`).
+- Retseptid `R[54…68]` on igapäevased kodutoidud (silt `kodu`, maitsevalik „Igapäevane kodutoit”).
 
 ## Andmed skriptis
 - `ING` – koostisosad: ühik, toiteväärtus (100 g/ml või 1 tk kohta: kcal, valk, süsivesikud, rasv, kiudained),

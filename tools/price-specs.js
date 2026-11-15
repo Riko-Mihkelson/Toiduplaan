@@ -99,6 +99,25 @@ const SPECS = {
   "kanakoivad": ["broileri koivad", "koiv|kintsuliha|kintsud", "suits|grill|marin|teriyaki|keedet|paneer|kauaküps|bbq|hakk|kalkun|kontideta|nahata"],
   "burgerikukkel": ["burgerikukkel", "burgeri.*kukk|burgerikukk|hamburgeri.*kukk|burgeri.*kukl", "mini", 80],
   "rooma salat": ["rooma salat", "rooma|romaine", "kaste|caesar|segu"],
-  "penne": ["täistera penne", "penne", "kaste|valmis|salat|glut|mais|riisi|kikerherne|lääts"]
+  "penne": ["täistera penne", "penne", "kaste|valmis|salat|glut|mais|riisi|kikerherne|lääts"],
+  "juust": ["juust viilutatud", "juust", "riiv|toorjuust|sulatatud|kodujuust|mozzarella|feta|parmesan|mascarpone|halloumi|snäkk|pulgad|kreeker|pizza|salatijuust|vahvl|krõps|kook|määre|kohupiim|sink|vorst|võileib|pirukas"],
+  "baguette": ["baguette", "baguette|bagett|prantsuse sai", "küüslau|mini|külmut|krutoon|pitsa|võileib"],
+  "röstsai": ["röstsai", "röstsai|röstsepik|röstleib|röstimiseks", "krõps|krutoon"],
+  "müsli": ["müsli", "müsli", "batoon|baar|jogurt|granola|šokolaad|küpsis"],
+  "jogurt": ["maitsestamata jogurt", "jogurt.*(maitsestamata|naturaal)|(maitsestamata|naturaal).*jogurt", "kreeka|skyr|joogi|jook|laktoosivaba|proteiin|mahe|kookos|taimne|kaera|soja"],
+  "tatar": ["tatar", "tatar|tatra", "nuudl|helbed|jahu|leib|galet|vahvl|puder|pudru|kotlet|krõps|tee|hakkliha|seente|valmis"],
+  "kohupiim": ["kohupiim", "kohupiim", "kreem|batoon|kook|pirukas|pannkoo|vaarika|maasika|mustika|vanilli|šokolaad|rosina|glasuur|kohuke|magus|desert|vahvl|pasha|pasta"],
+  "põldmurakad": ["põldmurakad", "põldmur", "jogurt|moos|jook|mahl|tee|segu|kissell"],
+  "sea-veise hakkliha": ["sea-veise hakkliha", "(sea.*veise|veise.*sea|kodune|segu).*hakk|hakk.*(sea|segu|kodune)", "kalkun|broiler|kana|lõhe|turs|mahe|kotlet|pall|valmis|kotleti"],
+  "sibul": ["sibul", "^sibul\\b|sibul,? kollane|kollane sibul", "punane|roheline|marin|krõps|praetud|kuivat|šalott|porru|pulber|granul|röst", 150],
+  "sink": ["keedusink", "sink", "suitsu|toor|parma|serrano|kalkuni|kana|broileri|vorst|salaami|võileib|pirukas|pitsa|juustu|ahju|kondi"],
+  "koor": ["toiduvalmistamise koor", "toiduvalmistamise|köögikoor|kööginõu|toidukoor|koor 10|koor 15", "vahu|hapu|kohvi|jäätis|kook|taimne|kookos|maitse|laktoosivaba"],
+  "pohlad": ["pohlad", "pohl", "moos|jook|mahl|tee|siirup|kissell|segu|kaste|püree"],
+  "forell": ["forell", "forell", "suits|sool|marin|viil|konserv|kook|määre|pasteet|graav|kuuma|kaaviar|mari"],
+  "kuivatatud aprikoosid": ["kuivatatud aprikoosid", "aprikoos", "moos|jogurt|mahl|nektar|konserv|batoon|tee|kompott|jäätis|kissell|kook"],
+  "tuunikala": ["tuunikala", "tuunikala", "salat|pasteet|määre|kass|koera|sööt|kaste|pasta|steik|külmut|wrap|võileib|õlis|tomati|tšilli|marin|oad"],
+  "farfalle": ["farfalle", "farfalle", "kaste|valmis|salat"],
+  "makaronid": ["makaronid", "makaron|cavatappi|fusilli|spiraal|torukesed", "kaste|valmis|salat|juust|mac|kiir|nuudl|lasanj|spagetid|penne|farfalle|munaga|täidis"],
+  "või": ["või", "^või\\b|\\bvõi\\b", "maapähkli|mandli|kakao|shea|küüslau|ürdi|taimne|leiva|määre|margariin|sulatatud|kreem|kook|küpsis|šokolaad"]
 };
 if (typeof module !== "undefined") module.exports = { SPECS };
